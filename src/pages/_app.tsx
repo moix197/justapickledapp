@@ -1,3 +1,5 @@
+"use client"
+
 import WalletContextProvider from 'contexts/WalletContextProvider';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -12,7 +14,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
     return (
         <>
           <Head>
-            <title>Solana Scaffold Lite</title>
+            <title>Pickle Dapp</title>
           </Head>
 
           <WalletContextProvider>
