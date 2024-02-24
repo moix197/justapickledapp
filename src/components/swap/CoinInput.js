@@ -22,7 +22,7 @@ const CoinInput = ({
 }) => {
 	const { rawTokensData } = useContext(TokenDataContext);
 	const [tokensData, setTokensData] = useState([]);
-	const [selectedToken, setSelectedToken] = useState({ name: "", symbold: "" });
+	const [selectedToken, setSelectedToken] = useState({ name: "", symbol: "" });
 	const [tokenInputText, setTokenInputText] = useState("");
 	const [amount, setAmount] = useState("");
 

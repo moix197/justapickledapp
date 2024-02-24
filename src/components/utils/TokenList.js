@@ -3,7 +3,7 @@ import ContractAddress from "components/utils/ContractAddress";
 
 const TokenList = ({
 	tokenData = [],
-	clickEvent = () => {},
+	clickEvent = ({}) => {},
 	selectedToken = {},
 }) => {
 	const [dataContent, setDataContent] = useState([]);
