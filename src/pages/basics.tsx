@@ -7,7 +7,7 @@ const Basics: NextPage = (props) => {
 		<div>
 			<Head>
 				<title>Pickle Dapp</title>
-				<meta name="description" content="Basic Functionality" />
+				<meta name="description" content="Just a Pickle Dapp" />
 			</Head>
 			<BasicsView />
 		</div>
