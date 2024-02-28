@@ -1,42 +1,52 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
 import { ExecuteSwapTransaction } from "components/swap/ExecuteSwapTransaction";
+import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { BasicButton } from "components/buttons/Basic";
+import { useRouter } from "next/router";
+import { debounce } from "utils/debounce";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 import CoinInput from "components/swap/CoinInput";
 import LoadingScreen from "components/utils/LoadingScreen";
 import TokenDrawer from "./TokenDrawer";
+import { removeCommasFromAmount } from "utils/formatAndUpdateAmount";
 
 function SwapParentContent(props) {
+	const router = useRouter();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const amountValueNow = useRef(0);
+	const [userPublicKey] = useContext(WalletDataContext);
 	const {
 		originTokenData,
-		setOriginTokenData,
+		originTokenAmount,
 		destinationTokenData,
-		setDestinationTokenData,
 		destinationTokenAmount,
-		setDestinationTokenAmount,
-		setOriginTokenAmount,
 		isLoadingTransaction,
 		isLoadingQuote,
+		setGetNewQuote,
 	} = useContext(TransactionDataContext);
+	const { setVisible: setModalVisible } = useWalletModal();
 
 	function originCoinChange(tokenData, amount) {
 		if (amount == 0) return;
-		setOriginTokenData({
-			...tokenData,
+		debounce(amountValueNow, amount, 1000, async () => {
+			router.query["amount"] = removeCommasFromAmount(amount);
+			router.push({
+				pathname: "/swap",
+				query: router.query,
+			});
 		});
-		setOriginTokenAmount(amount);
-	}
-
-	function destinationCoinChange(tokenData) {
-		setDestinationTokenData(tokenData);
 	}
 
 	function openDrawer() {
 		setIsDrawerOpen(true);
+	}
+
+	function connectWallet() {
+		setModalVisible(true);
 	}
 
 	return (
@@ -50,45 +60,61 @@ function SwapParentContent(props) {
 				)}
 				<div>
 					<CoinInput
-						initialValue={0}
-						initialAmount="1"
 						handleChange={(tokenData, amount) =>
 							originCoinChange(tokenData, amount)
 						}
 						isLoading={isLoadingQuote}
 						tokenListFirst={true}
 						text="you spend"
-						showQuickBtns={true}
+						showQuickBtns={userPublicKey ? true : false}
 						token={originTokenData}
-						setToken={setOriginTokenData}
+						urlAmount={originTokenAmount}
 						showTokenList={openDrawer}
+						showTokensInWallet={true}
+						urlParameter="originToken"
 					></CoinInput>
 				</div>
 
 				<div className="divider pt-2  md:pb-6 md:pt-6"></div>
 				<div>
 					<CoinInput
-						initialValue={1}
-						//defaultTokenvalue={"6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7"}
-						handleChange={(valuTokenData) =>
-							destinationCoinChange(valuTokenData)
-						}
+						handleChange={(valuTokenData) => {}}
 						givenAmount={destinationTokenAmount}
 						isLoading={isLoadingQuote}
 						text="To get"
 						disable
 						token={destinationTokenData}
-						setToken={setDestinationTokenData}
 						showTokenList={openDrawer}
+						urlParameter="destinationToken"
+						showTokensInWallet={true}
+						showRefreshPrice={{ value: true, getNewQuote: setGetNewQuote }}
 					></CoinInput>
 				</div>
-				<div className="mt-4">
-					<ExecuteSwapTransaction>
-						<BasicButton isLoading={isLoadingTransaction || isLoadingQuote}>
-							swap
-						</BasicButton>
-					</ExecuteSwapTransaction>
-				</div>
+				{userPublicKey ? (
+					<div className="mt-4">
+						<ExecuteSwapTransaction>
+							<BasicButton
+								className="p-6 pt-6 pb-6 bg-primary hover:bg-primary hover:text-third"
+								isLoading={isLoadingTransaction || isLoadingQuote}
+							>
+								swap
+							</BasicButton>
+						</ExecuteSwapTransaction>
+					</div>
+				) : (
+					<div className="mt-4">
+						<div
+							onClick={() => {
+								connectWallet();
+							}}
+						>
+							<div className="bg-primary border border-third text-center p-6 rounded-lg uppercase font-bold cursor-pointer hover:shadow-third">
+								connect wallet
+							</div>
+						</div>
+					</div>
+				)}
+				<div></div>
 			</div>
 			<TokenDrawer
 				isOpen={isDrawerOpen}

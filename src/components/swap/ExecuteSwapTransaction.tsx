@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Connection } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
 import { postSwapTransaction } from "services/postSwapTransaction";
@@ -12,7 +13,10 @@ function ExecuteSwapTransaction({ children }) {
 		setIsLoadingTransaction,
 	} = useContext(TransactionDataContext);
 	const wallet = useWallet();
-	const { connection } = useConnection();
+	//const { connection } = useConnection();
+	const connection = new Connection(
+		"https://withered-orbital-sailboat.solana-mainnet.quiknode.pro/ac33801cbf8e7a422bfc7ecbc7843f202e53fa60/"
+	);
 
 	async function fireTransaction() {
 		if (isLoadingTransaction || isLoadingQuote) return;

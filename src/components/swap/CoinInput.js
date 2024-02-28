@@ -4,22 +4,27 @@ import { TokenDataContext } from "contexts/TokenDataContextProvider";
 import { BasicButton } from "components/buttons/Basic";
 import TokenList from "components/utils/TokenList";
 import TokenTextInput from "./TokenTextInput";
+import { useRouter } from "next/router";
+import { addCommasToAmount } from "utils/formatAndUpdateAmount";
+import InWalletTokens from "./InWalletTokens";
+import { setUrlFromInput } from "utils/setUrlFromInput";
 
 const CoinInput = ({
-	initialValue,
 	handleChange,
 	disable = false,
 	givenAmount = 0,
-	initialAmount = "",
 	isLoading = false,
-	defaultTokenvalue = null,
 	tokenListFirst = false,
 	showQuickBtns = false,
 	text,
 	token,
-	setToken,
+	urlAmount = false,
+	showRefreshPrice = { value: false, getNewQuote: () => {} },
+	urlParameter,
+	showTokensInWallet = false,
 	showTokenList = () => {},
 }) => {
+	const router = useRouter();
 	const { rawTokensData } = useContext(TokenDataContext);
 	const [tokensData, setTokensData] = useState([]);
 	const [selectedToken, setSelectedToken] = useState({ name: "", symbol: "" });
@@ -31,7 +36,6 @@ const CoinInput = ({
 	}, [selectedToken]);
 
 	useEffect(() => {
-		if (givenAmount) return;
 		handleChange(selectedToken, amount);
 	}, [amount]);
 
@@ -41,69 +45,12 @@ const CoinInput = ({
 		}
 	}, [rawTokensData]);
 
+	useEffect(() => {
+		setAmount(urlAmount);
+	}, [urlAmount]);
+
 	async function setInitialData() {
-		if (defaultTokenvalue) {
-			//filterTokens(defaultTokenvalue, true);
-		} else {
-			setSelectedToken(rawTokensData[initialValue]);
-			setTokenInputText(rawTokensData[initialValue]?.name);
-		}
 		setTokensData(rawTokensData.slice(0, 25));
-
-		if (initialAmount) {
-			setAmount(initialAmount);
-		}
-	}
-
-	/*function filterTokens(textValue, setName = false) {
-		let itemsInList = 0;
-		let filteredData = rawTokensData.filter((item, i) => {
-			if (itemsInList > 20) return false;
-			if (item.address == textValue) {
-				itemsInList++;
-				return true;
-			} else if (
-				typeof textValue == "string" &&
-				item.symbol.toUpperCase().includes(textValue.toUpperCase())
-			) {
-				itemsInList++;
-				return true;
-			}
-		});
-		if (filteredData[0]) {
-			setSelectedToken(filteredData[0]);
-		} else {
-			setSelectedToken(selectedToken);
-		}
-		setTokensData(filteredData);
-		if (filteredData.length == 1) setTokensData(rawTokensData.slice(0, 25));
-
-		if (setName) setTokenInputText(filteredData[0]?.name);
-	}*/
-
-	function formatAndUpdateAmount(value) {
-		if (/^[0-9,.]*$/.test(value)) {
-			// Remove commas
-			const cleanValue = value.replace(/\,/g, "");
-
-			// Split into integer and fractional parts
-			const [integerPart, fractionalPart] = cleanValue.split(".");
-
-			// Format the integer part
-			const formattedIntegerPart = integerPart.replace(
-				/\B(?=(\d{3})+(?!\d))/g,
-				","
-			);
-
-			// Combine integer and fractional parts with a dot
-			const formattedValue =
-				fractionalPart !== undefined
-					? `${formattedIntegerPart}.${fractionalPart}`
-					: formattedIntegerPart;
-
-			// Set the state
-			return formattedValue;
-		}
 	}
 
 	return (
@@ -114,6 +61,14 @@ const CoinInput = ({
 				}`}
 			>
 				<div className="w-full text-lg text-center uppercase mb-2">{text}</div>
+				{showTokensInWallet && (
+					<InWalletTokens
+						clickEvent={(item) => {
+							if (isLoading) return;
+							setUrlFromInput(urlParameter, item, router);
+						}}
+					></InWalletTokens>
+				)}
 				<div className="w-full">
 					<div>
 						<TokenTextInput
@@ -122,31 +77,16 @@ const CoinInput = ({
 								value: true,
 								data: rawTokensData,
 								setFilteredDataFunction: setTokensData,
+								//setFilteredDataFunction: () => {},
 							}}
 							setSelectedTokenAfterFilter={{
 								value: true,
-								setSelectedFunction: setToken,
+								//setSelectedFunction: setToken,
+								setSelectedFunction: (item) => {
+									setUrlFromInput(urlParameter, item, router);
+								},
 							}}
 						></TokenTextInput>
-						{/*
-							<label className="input input-bordered border-fourth flex items-center gap-2 w-full pl-2 pr-2">
-								<input
-									type="text"
-									className="grow bg-primary 4 tracking-wide"
-									onChange={(e) => {
-										if (isLoading) return;
-										setTokenInputText(e.target.value);
-										filterTokens(e.target.value);
-									}}
-									onBlur={(e) => {
-										if (isLoading) return;
-										setTokenInputText(selectedToken.name);
-									}}
-									value={tokenInputText ? tokenInputText : ""}
-								/>
-								<ContractAddress ca={selectedToken?.address}></ContractAddress>
-							</label>
-								*/}
 					</div>
 				</div>
 				<label className="input input-bordered border-fourth flex items-center gap-2 w-full overflow-hidden mt-2 pl-2 pr-2">
@@ -160,8 +100,8 @@ const CoinInput = ({
 						onChange={(e) => {
 							if (!/^[0-9,.]*$/.test(e.target.value)) return;
 							if (isLoading) return;
-							let esto = formatAndUpdateAmount(e.target.value);
-							setAmount(esto);
+							let amountWithCommas = addCommasToAmount(e.target.value);
+							setAmount(amountWithCommas);
 						}}
 						onBlur={(e) => {
 							if (!e.target.value || e.target.value == "0") {
@@ -170,11 +110,34 @@ const CoinInput = ({
 						}}
 						value={
 							givenAmount
-								? formatAndUpdateAmount(givenAmount)
-								: formatAndUpdateAmount(amount)
+								? addCommasToAmount(givenAmount)
+								: addCommasToAmount(amount)
 						}
 						disabled={disable}
 					/>
+					{showRefreshPrice?.value == true && (
+						<div
+							onClick={() => {
+								showRefreshPrice.getNewQuote(true);
+							}}
+							className="cursor-pointer text-third hover:animate-spin "
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={1.5}
+								stroke="currentColor"
+								className="w-6 h-6"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+								/>
+							</svg>
+						</div>
+					)}
 					{showQuickBtns && (
 						<QuickAmountBtns
 							selectedToken={token}
@@ -200,7 +163,9 @@ const CoinInput = ({
 							</div>
 							<div className="flex justify-center items-start flex-col">
 								<div>{token?.symbol}</div>
-								<div className="text-[10px] text-primary ">SELECTED</div>
+								<div className="text-[10px] text-gray-400 text-bold ">
+									SELECTED
+								</div>
 							</div>
 						</div>
 						<div className="w-6/12">
@@ -213,10 +178,9 @@ const CoinInput = ({
 						<TokenList
 							tokenData={tokensData}
 							selectedToken={token}
-							clickEvent={(element) => {
+							clickEvent={(item) => {
 								if (isLoading) return;
-								setSelectedToken(element);
-								setTokenInputText(element?.name);
+								setUrlFromInput(urlParameter, item, router);
 							}}
 						></TokenList>
 					</div>

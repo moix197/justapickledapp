@@ -28,18 +28,11 @@ export const HomeView: FC = ({}) => {
 
 	return (
 		<div className="md:hero mx-auto p-4 w-full h-full flex justify-center items-center">
-			<div className="md:hero-content flex flex-col">
-				<h1 className="text-center text-5xl md:font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#9945FF] to-[#14F195]">
-					Pickle Swap
-				</h1>
-
-				<div className="text-center">
-					<RequestAirdrop />
-					{wallet.publicKey && <p>Public Key: {wallet.publicKey.toBase58()}</p>}
-					{wallet && <p>SOL Balance: {(balance || 0).toLocaleString()}</p>}
-					<SendTransaction />
+			<Link href="/swap">
+				<div className="bg-fourth p-8 font-bold rounded-lg cursor-pointer transition-transform hover:scale-105 hover:shadow-third">
+					GO TO SWAP
 				</div>
-			</div>
+			</Link>
 		</div>
 	);
 };

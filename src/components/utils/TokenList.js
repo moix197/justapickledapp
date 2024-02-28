@@ -23,7 +23,6 @@ const TokenList = ({
 
 	function handleScroll(e) {
 		const { scrollTop, scrollHeight, clientHeight } = e.target;
-		console.log(scrollTop + " ---- " + scrollHeight + " ---- " + clientHeight);
 		let loadWhen = scrollTop + clientHeight + 100;
 		if (loadWhen >= scrollHeight) {
 			setScrolledPage(scrolledPage + 1);
@@ -33,7 +32,7 @@ const TokenList = ({
 	return (
 		<div
 			onScroll={handleScroll}
-			className="w-full overflow-y-scroll scrollbar-hide"
+			className="w-full overflow-y-scroll scrollbar-hide h-auto"
 		>
 			<ul>
 				{dataContent.map((element, i) => (

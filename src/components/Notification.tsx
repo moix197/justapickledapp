@@ -92,9 +92,7 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 						{txid ? (
 							<div className="flex flex-row">
 								<a
-									href={
-										"https://explorer.solana.com/tx/" + txid + `?cluster=devnet`
-									}
+									href={"https://solscan.io/tx/" + txid}
 									target="_blank"
 									rel="noreferrer"
 									className="flex flex-row link link-accent"

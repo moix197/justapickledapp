@@ -4,6 +4,10 @@ module.exports = {
   darkMode: "media",
   theme: {
     extend: {
+      height:{
+        screen:'100vh',
+        screen:'100svh'
+      },
       backgroundImage: {
 				fade: "url(/images/main_web/bg_fade.jpg)",
 			},

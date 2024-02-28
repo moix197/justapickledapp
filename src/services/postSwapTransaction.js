@@ -19,19 +19,35 @@ async function postSwapTransaction(quote, wallet, connection) {
 		let data = await response.json();
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
-		let conn = await connection.confirmTransaction(signature, "confirmed");
-		console.log("esto es el conn");
-		console.log(conn);
-		console.log("-_________________-");
-		console.log("esto es el signature:");
+		let latestBlockHash = await connection.getLatestBlockhash();
+		console.log("signature: ");
 		console.log(signature);
-		console.log("********************");
+		console.log("________________________");
+
+		console.log("latestBlockHash: ");
+		console.log(latestBlockHash);
+		console.log("________________________");
+		let conn = await connection.confirmTransaction(signature, "processed");
+		console.log("conn: ");
+		console.log(conn);
+		console.log("________________________");
+
+		if (conn?.value?.err) {
+			notify({
+				type: "error",
+				message: "Failed to Confirm the transaction!",
+				description: conn.value.err,
+			});
+			return;
+		}
 		notify({
 			type: "success",
 			message: "Transaction successful!",
 			txid: signature,
 		});
 	} catch (error) {
+		console.log("error");
+		console.log(error);
 		notify({
 			type: "error",
 			message: `Transaction failed!`,

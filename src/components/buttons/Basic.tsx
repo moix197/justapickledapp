@@ -3,10 +3,14 @@ function BasicButton({
 	isLoading = false,
 	color = "third",
 	className = null,
+	background = "",
 }) {
 	return (
 		<div
-			className={`w-full pt-4 pb-4 border border-${color} bg-gray-900 text-${color} rounded-lg  font-bold uppercase -inner text-center cursor-pointer transition-transform active:opacity-80 
+			className={`w-full pt-4 pb-4 relative border border-${color} bg-${
+				background ? background : "gray-900"
+			} text-${color} rounded-lg  
+			font-bold uppercase -inner text-center cursor-pointer transition-transform active:opacity-80 
 			hover:shadow-third 
 			hover:bg-third hover:text-gray-900
 			${className}`}

@@ -8,7 +8,7 @@ export const AppBar: FC = (props) => {
 	return (
 		<div>
 			{/* NavBar / Header */}
-			<div className="navbar flex flex-row shadow-lg text-neutral-content border-b border-fourth">
+			<div className="navbar pt-1 pb-1 md:pt-2 md-pb-2 flex flex-row shadow-lg text-neutral-content border-b border-fourth">
 				<div className="navbar-start">
 					<div className=" w-22 h-22 p-2 flex justify-center align-center">
 						<LogoBg width={40} height={40}></LogoBg>

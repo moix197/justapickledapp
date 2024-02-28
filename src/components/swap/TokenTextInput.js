@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext, useRef } from "react";
-import { debounce } from "utils/debounce";
 import ContractAddress from "components/utils/ContractAddress";
 import { filterTokensByInput } from "utils/filterTokensByInput";
 
@@ -28,13 +27,17 @@ const TokenTextInput = ({
 		setInputValue(selectedToken?.name);
 	}, [selectedToken]);
 
-	useEffect(() => {
+	function updateInput() {
 		if (!setSelectedTokenAfterFilter.value) return;
-		if (filteredData.length == 0) return;
-		debounce(textValueNow, inputValue, 1000, async () => {
+		//if (filteredData.length == 0) return;
+		/*debounce(textValueNow, inputValue, 1000, async () => {
+			if (textValueNow == "") return;
+			console.log("oka");
+			console.log(textValueNow);
 			setSelectedTokenAfterFilter.setSelectedFunction(filteredData[0]);
-		});
-	}, [inputValue]);
+		});*/
+		setSelectedTokenAfterFilter.setSelectedFunction(filteredData[0]);
+	}
 
 	return (
 		<div className="w-full">
@@ -44,7 +47,6 @@ const TokenTextInput = ({
 					className="grow bg-primary 4 tracking-wide"
 					onChange={(e) => {
 						setInputValue(e.target.value);
-
 						if (filterData?.value == true) {
 							let filteredData = (filteredData = filterTokensByInput(
 								filterData.data,
@@ -54,9 +56,11 @@ const TokenTextInput = ({
 							setFilteredData(filteredData);
 						}
 						changeEvent(e);
+						//updateInput();
 					}}
 					onBlur={(e) => {
-						setInputValue(selectedToken?.name);
+						//setInputValue(selectedToken?.name);
+						updateInput();
 						blurEvent(e);
 					}}
 					onFocus={(e) => {
