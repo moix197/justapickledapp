@@ -2,6 +2,9 @@ module.exports = {
   mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "media",
+  future: {
+    hoverOnlyWhenSupported: true
+  },
   theme: {
     extend: {
       height:{
@@ -13,10 +16,11 @@ module.exports = {
 			},
       colors: {
 				primary: "#090d16",
-				secondary: "#fff",
+				secondary: "#cccccc",
 				third: "#10B981",
-				fourth: "#4C1D95",
-        error: "#991B1B",
+				//fourth: "#4C1D95",
+				fourth: "#320f69",
+        error: "#EF4444",
         success: "#10B981",
         info: "#4C1D95"
 			},
@@ -24,7 +28,8 @@ module.exports = {
         '10000': '10000ms',
       },
       boxShadow: {
-        'third': '0px -1px 12px -4px rgba(10,133,92,1)'
+        'third': '0px -1px 12px -4px rgba(10,133,92,1)',
+        'red': '0px -1px 12px -4px rgba(248,113,113,1)'
       }
     },
   },

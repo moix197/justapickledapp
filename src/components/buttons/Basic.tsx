@@ -4,23 +4,32 @@ function BasicButton({
 	color = "third",
 	className = null,
 	background = "",
+	error = false,
+	disabled = false,
+	clickEvent = () => {},
 }) {
 	return (
-		<div
-			className={`w-full pt-4 pb-4 relative border border-${color} bg-${
-				background ? background : "gray-900"
-			} text-${color} rounded-lg  
+		<button
+			onClick={() => clickEvent()}
+			disabled={disabled}
+			className={`w-full pt-4 pb-4 relative border ${
+				!error ? `border-${color}` : "border-red-400"
+			} bg-${background ? background : "gray-900"} ${
+				!error ? `text-${color}` : "text-red-400"
+			} rounded-lg  
 			font-bold uppercase -inner text-center cursor-pointer transition-transform active:opacity-80 
-			hover:shadow-third 
+			${!error ? "hover:shadow-third" : "hover:shadow-red"}
 			hover:bg-third hover:text-gray-900
-			${className}`}
+			${className}
+			${error && "hover:bg-red-400"}
+			`}
 		>
 			{!isLoading ? (
 				children
 			) : (
 				<span className="loading loading-ring loading-md -mt-1 -mb-1"></span>
 			)}
-		</div>
+		</button>
 	);
 }
 

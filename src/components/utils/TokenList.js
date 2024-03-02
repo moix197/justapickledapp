@@ -53,7 +53,9 @@ const TokenList = ({
 									className="w-8 object-contain object-center rounded-full"
 								></img>
 							</div>
-							<div className="ml-2 font-bold">{element?.symbol}</div>
+							<div className="ml-2 font-bold text-secondary">
+								{element?.symbol}
+							</div>
 						</div>
 						<div>
 							<ContractAddress

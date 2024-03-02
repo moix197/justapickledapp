@@ -2,13 +2,12 @@ import { useContext, useEffect } from "react";
 import { TokensInAccountContext } from "contexts/TokensInAccountContextProvider";
 import { useRouter } from "next/router";
 
-const QuickAmountBtns = ({ selectedToken, setAmount, isLoading = false }) => {
-	const { walletTokenListRaw } = useContext(TokensInAccountContext);
+const QuickAmountBtns = ({ selectedToken, isLoading = false }) => {
+	const { walletTokenListProcesed } = useContext(TokensInAccountContext);
 	const router = useRouter();
 
 	function fireMax(amount) {
 		if (isLoading) return;
-		//setAmount(amount);
 		router.query["amount"] = amount.toString();
 		router.push({
 			pathname: "/swap",
@@ -19,6 +18,19 @@ const QuickAmountBtns = ({ selectedToken, setAmount, isLoading = false }) => {
 	function fireHalf(amount) {
 		if (isLoading) return;
 		let half = amount / 2;
+		let stringToCheckAry = half.toString().split(".");
+
+		if (
+			stringToCheckAry[1] &&
+			stringToCheckAry[1].length > selectedToken.decimals
+		) {
+			stringToCheckAry[1] = stringToCheckAry[1].slice(
+				0,
+				selectedToken.decimals
+			);
+			half = parseFloat(stringToCheckAry.join("."));
+		}
+
 		router.query["amount"] = half.toString();
 		router.push({
 			pathname: "/swap",
@@ -27,20 +39,21 @@ const QuickAmountBtns = ({ selectedToken, setAmount, isLoading = false }) => {
 	}
 
 	return (
-		<div className="w-full flex text-secondary  justify-end items-center">
-			{walletTokenListRaw &&
-				walletTokenListRaw?.value.map((item) => {
-					if (
-						selectedToken?.address == item?.account?.data?.parsed?.info?.mint
-					) {
+		<div className="flex text-secondary  justify-end items-center md:max-w-[100px]">
+			{walletTokenListProcesed.length > 0 &&
+				walletTokenListProcesed?.map((item) => {
+					{
+						item.address;
+					}
+					if (selectedToken?.address == item?.address) {
 						return (
-							<div className="flex">
+							<div
+								className="flex"
+								key={`quick_amount_btn_${selectedToken?.address}`}
+							>
 								<div
 									onClick={() => {
-										fireMax(
-											item?.account?.data?.parsed?.info?.tokenAmount
-												?.uiAmountString
-										);
+										fireMax(item?.uiAmountString);
 									}}
 									className="bg-primary border border-third pl-2 pr-2 rounded-lg mr-2 text-[11px] cursor-pointer hover:shadow-third hover:text-gray-900 hover:bg-third"
 								>
@@ -48,9 +61,7 @@ const QuickAmountBtns = ({ selectedToken, setAmount, isLoading = false }) => {
 								</div>
 								<div
 									onClick={() => {
-										fireHalf(
-											item?.account?.data?.parsed?.info?.tokenAmount?.uiAmount
-										);
+										fireHalf(item?.uiAmount);
 									}}
 									className="bg-primary border border-third pl-2 pr-2 rounded-lg text-[11px] cursor-pointer hover:shadow-third hover:text-gray-900 hover:bg-third"
 								>

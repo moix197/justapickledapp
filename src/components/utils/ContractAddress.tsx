@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 //const [isVisibleTokenInfo, setTokenInfoState] = useState(true);
 
-export default function ContractAddress({ text = null, ca, disabled = false }) {
+export default function ContractAddress({
+	text = null,
+	ca,
+	disabled = false,
+	splitContrat = true,
+}) {
 	const [isCaClicked, setCtaClicked] = useState(false);
 	function copyContractToClipboard() {
 		navigator.clipboard.writeText(ca);
@@ -35,7 +40,9 @@ export default function ContractAddress({ text = null, ca, disabled = false }) {
 				} ${isCaClicked ? "hidden" : ""}`}
 			>
 				<span>{!text ? "CA:" : text}</span>
-				<span className="text-[11px] ml-1 mr-1">{cutContract(ca)}</span>
+				<span className="text-[11px] ml-1 mr-1 tracking-wider">
+					{splitContrat ? cutContract(ca) : ca}
+				</span>
 				{!disabled && (
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

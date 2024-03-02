@@ -20,7 +20,7 @@ export default function TokenDataContainer({ children }) {
 	useEffect(() => {
 		const fetchData = async () => {
 			let tokensData = await getAllTokens();
-			setTokensRawData(tokensData);
+			setTokensRawData(tokensData.value);
 		};
 		fetchData(); // Call the fetchData function here
 	}, []);

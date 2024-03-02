@@ -1,8 +1,15 @@
 async function getAllTokens() {
 	let tokensURL = "https://token.jup.ag/all";
+	console.log("fetching all tokens");
 	let response = await fetch(tokensURL);
 	let data = await response.json();
-	return data;
+
+	let objToLocalStorage = {
+		time: new Date(),
+		value: data,
+	};
+
+	return { value: data };
 }
 
 export { getAllTokens };

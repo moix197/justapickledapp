@@ -3,6 +3,7 @@ import { TransactionDataContext } from "contexts/TransactionDataContextProvider"
 import { ExecuteSwapTransaction } from "components/swap/ExecuteSwapTransaction";
 import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { BasicButton } from "components/buttons/Basic";
+import { SwapInputsBtn } from "components/swap/SwapInputsBtn";
 import { useRouter } from "next/router";
 import { debounce } from "utils/debounce";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -11,11 +12,11 @@ import CoinInput from "components/swap/CoinInput";
 import LoadingScreen from "components/utils/LoadingScreen";
 import TokenDrawer from "./TokenDrawer";
 import { removeCommasFromAmount } from "utils/formatAndUpdateAmount";
+import { StartSwapBtn } from "./StartSwapBtn";
 
-function SwapParentContent(props) {
+function SwapBasicSection({ setScreen = null }) {
 	const router = useRouter();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const amountValueNow = useRef(0);
 	const [userPublicKey] = useContext(WalletDataContext);
@@ -31,7 +32,6 @@ function SwapParentContent(props) {
 	const { setVisible: setModalVisible } = useWalletModal();
 
 	function originCoinChange(tokenData, amount) {
-		if (amount == 0) return;
 		debounce(amountValueNow, amount, 1000, async () => {
 			router.query["amount"] = removeCommasFromAmount(amount);
 			router.push({
@@ -49,6 +49,8 @@ function SwapParentContent(props) {
 		setModalVisible(true);
 	}
 
+	function swapInputs() {}
+
 	return (
 		<div className="h-screen bg-fade bg-no-repeat bg-cover bg-center flex justify-center items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
 			<div className="w-[800px] relative max-w-full flex justify-center h-auto flex flex-col">
@@ -58,6 +60,16 @@ function SwapParentContent(props) {
 						description="waiting for transaction"
 					></LoadingScreen>
 				)}
+				<div className="flex justify-center">
+					<div
+						onClick={() => {
+							setScreen(true);
+						}}
+						className="text-third uppercase mb-5 font-bold hover:opacity-50 cursor-pointer"
+					>
+						<div>checkout our new simple SWAP mode</div>
+					</div>
+				</div>
 				<div>
 					<CoinInput
 						handleChange={(tokenData, amount) =>
@@ -74,8 +86,9 @@ function SwapParentContent(props) {
 						urlParameter="originToken"
 					></CoinInput>
 				</div>
-
-				<div className="divider pt-2  md:pb-6 md:pt-6"></div>
+				<div className="divider pt-2  md:pb-6 md:pt-6">
+					<SwapInputsBtn></SwapInputsBtn>
+				</div>
 				<div>
 					<CoinInput
 						handleChange={(valuTokenData) => {}}
@@ -90,30 +103,7 @@ function SwapParentContent(props) {
 						showRefreshPrice={{ value: true, getNewQuote: setGetNewQuote }}
 					></CoinInput>
 				</div>
-				{userPublicKey ? (
-					<div className="mt-4">
-						<ExecuteSwapTransaction>
-							<BasicButton
-								className="p-6 pt-6 pb-6 bg-primary hover:bg-primary hover:text-third"
-								isLoading={isLoadingTransaction || isLoadingQuote}
-							>
-								swap
-							</BasicButton>
-						</ExecuteSwapTransaction>
-					</div>
-				) : (
-					<div className="mt-4">
-						<div
-							onClick={() => {
-								connectWallet();
-							}}
-						>
-							<div className="bg-primary border border-third text-center p-6 rounded-lg uppercase font-bold cursor-pointer hover:shadow-third">
-								connect wallet
-							</div>
-						</div>
-					</div>
-				)}
+				<StartSwapBtn></StartSwapBtn>
 				<div></div>
 			</div>
 			<TokenDrawer
@@ -128,4 +118,4 @@ function SwapParentContent(props) {
 	);
 }
 
-export default SwapParentContent;
+export default SwapBasicSection;

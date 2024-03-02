@@ -1,11 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-	Connection,
-	clusterApiUrl,
-	Keypair,
-	VersionedTransaction,
-} from "@solana/web3.js";
 
 async function doThis(postData) {
 	//console.log(postData.body.userPublicKey);

@@ -24,18 +24,12 @@ const TokenTextInput = ({
 	}, []);
 
 	useEffect(() => {
+		if (!selectedToken?.name) return;
 		setInputValue(selectedToken?.name);
 	}, [selectedToken]);
 
 	function updateInput() {
 		if (!setSelectedTokenAfterFilter.value) return;
-		//if (filteredData.length == 0) return;
-		/*debounce(textValueNow, inputValue, 1000, async () => {
-			if (textValueNow == "") return;
-			console.log("oka");
-			console.log(textValueNow);
-			setSelectedTokenAfterFilter.setSelectedFunction(filteredData[0]);
-		});*/
 		setSelectedTokenAfterFilter.setSelectedFunction(filteredData[0]);
 	}
 
@@ -44,7 +38,7 @@ const TokenTextInput = ({
 			<label className="input input-bordered border-fourth flex items-center gap-2 w-full pl-2 pr-2">
 				<input
 					type="text"
-					className="grow bg-primary 4 tracking-wide"
+					className="grow bg-primary 4 tracking-wide text-secondary"
 					onChange={(e) => {
 						setInputValue(e.target.value);
 						if (filterData?.value == true) {

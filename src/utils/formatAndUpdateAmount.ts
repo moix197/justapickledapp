@@ -1,10 +1,15 @@
-function addCommasToAmount(value) {
+function addCommasToAmount(value,decimals) {
+	if(value == "0") return "0";
 	if (/^[0-9,.]*$/.test(value)) {
 		// Remove commas
 		const cleanValue = value.replace(/\,/g, "");
 
 		// Split into integer and fractional parts
-		const [integerPart, fractionalPart] = cleanValue.split(".");
+		let [integerPart, fractionalPart] = cleanValue.split(".");
+
+		if(fractionalPart && fractionalPart.length > decimals){
+			fractionalPart = fractionalPart.slice(0, decimals);
+		}
 
 		// Format the integer part
 		const formattedIntegerPart = integerPart.replace(

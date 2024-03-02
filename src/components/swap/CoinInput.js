@@ -8,11 +8,12 @@ import { useRouter } from "next/router";
 import { addCommasToAmount } from "utils/formatAndUpdateAmount";
 import InWalletTokens from "./InWalletTokens";
 import { setUrlFromInput } from "utils/setUrlFromInput";
+import { RefreshPriceBtn } from "./RefreshPriceBtn";
 
 const CoinInput = ({
 	handleChange,
 	disable = false,
-	givenAmount = 0,
+	givenAmount = "0",
 	isLoading = false,
 	tokenListFirst = false,
 	showQuickBtns = false,
@@ -27,13 +28,16 @@ const CoinInput = ({
 	const router = useRouter();
 	const { rawTokensData } = useContext(TokenDataContext);
 	const [tokensData, setTokensData] = useState([]);
+	const [filteredTokenData, setFilteredTokenData] = useState([]);
 	const [selectedToken, setSelectedToken] = useState({ name: "", symbol: "" });
-	const [tokenInputText, setTokenInputText] = useState("");
-	const [amount, setAmount] = useState("");
+	const [amount, setAmount] = useState("0");
 
 	useEffect(() => {
-		handleChange(selectedToken, amount);
-	}, [selectedToken]);
+		let finalAmount = givenAmount
+			? addCommasToAmount(givenAmount, token?.decimals)
+			: addCommasToAmount(amount, token?.decimals);
+		setAmount(finalAmount);
+	}, [givenAmount]);
 
 	useEffect(() => {
 		handleChange(selectedToken, amount);
@@ -42,11 +46,14 @@ const CoinInput = ({
 	useEffect(() => {
 		if (rawTokensData.length > 0) {
 			setInitialData();
+			setFilteredTokenData(rawTokensData);
 		}
 	}, [rawTokensData]);
 
 	useEffect(() => {
-		setAmount(urlAmount);
+		if (!urlAmount) return;
+		let finalAmount = addCommasToAmount(urlAmount, token?.decimals);
+		setAmount(finalAmount);
 	}, [urlAmount]);
 
 	async function setInitialData() {
@@ -60,7 +67,9 @@ const CoinInput = ({
 					tokenListFirst ? "md:pl-5" : "md:pr-5"
 				}`}
 			>
-				<div className="w-full text-lg text-center uppercase mb-2">{text}</div>
+				<div className="w-full text-lg text-center uppercase mb-2 text-secondary">
+					{text}
+				</div>
 				{showTokensInWallet && (
 					<InWalletTokens
 						clickEvent={(item) => {
@@ -77,7 +86,7 @@ const CoinInput = ({
 								value: true,
 								data: rawTokensData,
 								setFilteredDataFunction: setTokensData,
-								//setFilteredDataFunction: () => {},
+								setFilteredDataFunction: setFilteredTokenData,
 							}}
 							setSelectedTokenAfterFilter={{
 								value: true,
@@ -96,11 +105,16 @@ const CoinInput = ({
 					<input
 						type="text"
 						placeholder="AMOUNT"
-						className={`grow bg-primary 4 text-xl ${isLoading && "opacity-0"}`}
+						className={`grow bg-primary 4 text-xl ${
+							isLoading && "opacity-0"
+						} text-secondary`}
 						onChange={(e) => {
 							if (!/^[0-9,.]*$/.test(e.target.value)) return;
 							if (isLoading) return;
-							let amountWithCommas = addCommasToAmount(e.target.value);
+							let amountWithCommas = addCommasToAmount(
+								e.target.value,
+								token?.decimals
+							);
 							setAmount(amountWithCommas);
 						}}
 						onBlur={(e) => {
@@ -108,35 +122,11 @@ const CoinInput = ({
 								setAmount("1");
 							}
 						}}
-						value={
-							givenAmount
-								? addCommasToAmount(givenAmount)
-								: addCommasToAmount(amount)
-						}
+						value={amount}
 						disabled={disable}
 					/>
 					{showRefreshPrice?.value == true && (
-						<div
-							onClick={() => {
-								showRefreshPrice.getNewQuote(true);
-							}}
-							className="cursor-pointer text-third hover:animate-spin "
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth={1.5}
-								stroke="currentColor"
-								className="w-6 h-6"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-								/>
-							</svg>
-						</div>
+						<RefreshPriceBtn></RefreshPriceBtn>
 					)}
 					{showQuickBtns && (
 						<QuickAmountBtns
@@ -162,7 +152,7 @@ const CoinInput = ({
 								></img>
 							</div>
 							<div className="flex justify-center items-start flex-col">
-								<div>{token?.symbol}</div>
+								<div className="text-secondary">{token?.symbol}</div>
 								<div className="text-[10px] text-gray-400 text-bold ">
 									SELECTED
 								</div>
@@ -176,7 +166,7 @@ const CoinInput = ({
 					</div>
 					<div className="h-[106px] md:flex relative  hidden md:block">
 						<TokenList
-							tokenData={tokensData}
+							tokenData={filteredTokenData}
 							selectedToken={token}
 							clickEvent={(item) => {
 								if (isLoading) return;
@@ -185,7 +175,7 @@ const CoinInput = ({
 						></TokenList>
 					</div>
 				</div>
-				<div className="hidden md:block top-full left-0 text-center w-full bg-gray-800 p-1 text-[11px] uppercase">
+				<div className="hidden md:block text-secondary top-full left-0 text-center w-full bg-gray-800 p-1 text-[11px] uppercase">
 					scroll to see more
 				</div>
 			</div>

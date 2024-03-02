@@ -18,19 +18,27 @@ async function postSwapTransaction(quote, wallet, connection) {
 		});
 		let data = await response.json();
 		let transaction = VersionedTransaction.deserialize(data.data);
+		//let signedTransaction = await wallet.signTransaction(transaction);
+		//console.log(signedTransaction);
+		//let rawTransaction = transaction;
 		let signature = await wallet.sendTransaction(transaction, connection);
-		let latestBlockHash = await connection.getLatestBlockhash();
-		console.log("signature: ");
-		console.log(signature);
-		console.log("________________________");
-
-		console.log("latestBlockHash: ");
-		console.log(latestBlockHash);
-		console.log("________________________");
 		let conn = await connection.confirmTransaction(signature, "processed");
-		console.log("conn: ");
-		console.log(conn);
-		console.log("________________________");
+
+		//let final = signedTransaction.serialize();
+		//console.log(final);
+		/*let urlTransaction = "/api/sendTransaction";
+		let responseTransaction = await fetch(urlTransaction, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				// quoteResponse from /quote api
+				signedTransaction: rawTransaction,
+				esto: "esteee",
+				// user public key to be used for the swap
+			}),
+		});*/
 
 		if (conn?.value?.err) {
 			notify({
@@ -38,13 +46,14 @@ async function postSwapTransaction(quote, wallet, connection) {
 				message: "Failed to Confirm the transaction!",
 				description: conn.value.err,
 			});
-			return;
+			return { value: "error" };
 		}
 		notify({
 			type: "success",
 			message: "Transaction successful!",
 			txid: signature,
 		});
+		return { value: "success", txid: signature };
 	} catch (error) {
 		console.log("error");
 		console.log(error);
@@ -53,7 +62,7 @@ async function postSwapTransaction(quote, wallet, connection) {
 			message: `Transaction failed!`,
 			description: error?.message,
 		});
-		return;
+		return { value: "error" };
 	}
 }
 
