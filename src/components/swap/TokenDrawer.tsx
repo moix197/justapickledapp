@@ -90,10 +90,10 @@ const TokenDrawer = ({ isOpen = false, setIsOpen, isLoading = false }) => {
 							<div className="text-center text-xs pt-2">
 								{`You're swapping ${addCommasToAmount(
 									originTokenAmount,
-									originTokenData.decimals
+									originTokenData?.decimals
 								)} ${originTokenData?.name} FOR ${addCommasToAmount(
 									destinationTokenAmount,
-									destinationTokenData.decimals
+									destinationTokenData?.decimals
 								)} ${destinationTokenData?.name}`}
 							</div>
 						</div>
