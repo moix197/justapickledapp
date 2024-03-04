@@ -70,6 +70,7 @@ export default function TransactionDataContainer({ children }) {
 		if (
 			!destinationTokenData ||
 			!originTokenData ||
+			!originTokenAmount ||
 			Object.entries(destinationTokenData).length == 0 ||
 			Object.entries(originTokenData).length == 0
 		) {
@@ -104,6 +105,7 @@ export default function TransactionDataContainer({ children }) {
 	}
 
 	async function fetchUsdcValue() {
+		if (!originTokenAmount || !originTokenData) return;
 		setIsLoadingUsdcQuote(true);
 		let quoteAmount = removeDecimalPointAndAddNumbers(
 			originTokenAmount,

@@ -6,8 +6,8 @@ const InWalletTokens = ({ clickEvent, title = "", limit = 5 }) => {
 	return (
 		<div className="w-full flex flex-col items-center sm:items-end">
 			{title && walletTokenListProcesed.length > 0 && (
-				<div className="text-xs mb-2 mt-2 text-center uppercase text-secondary">
-					<div>{title}</div>
+				<div className="text-xs mb-2 mt-2 text-center uppercase text-secondary w-full">
+					{title}
 				</div>
 			)}
 			<ul className="w-auto flex justify-center items-start flex-wrap">

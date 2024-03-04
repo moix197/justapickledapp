@@ -14,7 +14,7 @@ import TokenDrawer from "./TokenDrawer";
 import { removeCommasFromAmount } from "utils/formatAndUpdateAmount";
 import { StartSwapBtn } from "./StartSwapBtn";
 
-function SwapBasicSection({ setScreen = null }) {
+function SwapBasicSection() {
 	const router = useRouter();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -52,24 +52,15 @@ function SwapBasicSection({ setScreen = null }) {
 	function swapInputs() {}
 
 	return (
-		<div className="h-screen bg-fade bg-no-repeat bg-cover bg-center flex justify-center items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
-			<div className="w-[800px] relative max-w-full flex justify-center h-auto flex flex-col">
+		<div className="min-h-[calc(100vh-69px)] bg-fade bg-no-repeat bg-cover bg-center flex justify-center items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
+			<div className="w-[800px] relative max-w-full flex justify-center flex flex-col">
 				{isLoadingTransaction && (
 					<LoadingScreen
 						title="Check your wallet"
 						description="waiting for transaction"
 					></LoadingScreen>
 				)}
-				<div className="flex justify-center">
-					<div
-						onClick={() => {
-							setScreen(true);
-						}}
-						className="text-third uppercase mb-5 font-bold hover:opacity-50 cursor-pointer"
-					>
-						<div>checkout our new simple SWAP mode</div>
-					</div>
-				</div>
+
 				<div>
 					<CoinInput
 						handleChange={(tokenData, amount) =>

@@ -34,6 +34,13 @@ const OriginTokenForm = ({
 	const [isTokenSafe, setIsTokenSafe] = useState(false);
 	const [isToken2022, setIsToken2022] = useState(false);
 	const [isTokenInWallet, setIsTokenInWallet] = useState(false);
+	const [activeToken, setActiveToken] = useState(null);
+
+	useEffect(() => {
+		setActiveToken(
+			urlParameter == "originToken" ? originTokenData : destinationTokenData
+		);
+	}, []);
 
 	useEffect(() => {
 		setFilteredTokenData(rawTokensData);
@@ -46,23 +53,30 @@ const OriginTokenForm = ({
 	}, [isModalOpen]);
 
 	useEffect(() => {
-		originTokenData?.tags?.find((element) => element == "unknown")
+		setActiveToken(
+			urlParameter == "originToken" ? originTokenData : destinationTokenData
+		);
+	}, [urlParameter == "originToken" ? originTokenData : destinationTokenData]);
+
+	useEffect(() => {
+		if (!activeToken) return;
+		activeToken?.tags?.find((element) => element == "unknown")
 			? setIsTokenSafe(false)
 			: setIsTokenSafe(true);
 
-		originTokenData?.address ==
-			"6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7" && setIsTokenSafe(true);
+		activeToken?.address == "6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7" &&
+			setIsTokenSafe(true);
 
-		originTokenData?.tags?.find((element) => element == "token-2022")
+		activeToken?.tags?.find((element) => element == "token-2022")
 			? setIsToken2022(true)
 			: setIsToken2022(false);
 
 		walletTokenListProcesed.find(
-			(element) => element.address == originTokenData.address
+			(element) => element.address == activeToken.address
 		)
 			? setIsTokenInWallet(true)
 			: setIsTokenInWallet(false);
-	}, [urlParameter]);
+	}, [activeToken]);
 
 	function resetTokenData() {
 		if (filteredTokenData.length == rawTokensData.length) return;
@@ -104,9 +118,9 @@ const OriginTokenForm = ({
 								focusEvent={() => {
 									resetTokenData();
 									setActiveInput(1);
-									setDrawerSelectedToken(originTokenData);
+									setDrawerSelectedToken(activeToken);
 								}}
-								selectedToken={originTokenData}
+								selectedToken={activeToken}
 								filterData={{
 									value: true,
 									data: rawTokensData,
@@ -126,10 +140,10 @@ const OriginTokenForm = ({
 					</div>
 					<div>and select one from the list below</div>
 				</div>
-				<div className="h-96 overflow-y-scroll">
+				<div className="h-96">
 					<TokenList
 						tokenData={filteredTokenData}
-						selectedToken={drawerSelectedToken}
+						selectedToken={activeToken}
 						clickEvent={(item) => {
 							if (isLoading) return;
 							setIsModalOpen(true);

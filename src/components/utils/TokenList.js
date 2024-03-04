@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import ContractAddress from "components/utils/ContractAddress";
 
 const TokenList = ({
@@ -32,7 +32,7 @@ const TokenList = ({
 	return (
 		<div
 			onScroll={handleScroll}
-			className="w-full overflow-y-scroll scrollbar-hide h-auto"
+			className="w-full overflow-y-scroll scrollbar-hide h-full"
 		>
 			<ul>
 				{dataContent.map((element, i) => (
