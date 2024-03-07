@@ -11,11 +11,8 @@ function InitialSwapScreen() {
 			{!screenToShow && (
 				<SelectionScreen clickEvent={setScreenToShow}></SelectionScreen>
 			)}
-			{screenToShow == "classic" ? (
-				<SwapBasicSection></SwapBasicSection>
-			) : (
-				<SwapNewbieSection></SwapNewbieSection>
-			)}
+			{screenToShow == "classic" && <SwapBasicSection></SwapBasicSection>}{" "}
+			{screenToShow == "simple" && <SwapNewbieSection></SwapNewbieSection>}
 		</div>
 	);
 }

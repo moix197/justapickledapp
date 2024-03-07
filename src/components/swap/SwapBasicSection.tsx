@@ -11,7 +11,10 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import CoinInput from "components/swap/CoinInput";
 import LoadingScreen from "components/utils/LoadingScreen";
 import TokenDrawer from "./TokenDrawer";
-import { removeCommasFromAmount } from "utils/formatAndUpdateAmount";
+import {
+	addCommasToAmount,
+	removeCommasFromAmount,
+} from "utils/formatAndUpdateAmount";
 import { StartSwapBtn } from "./StartSwapBtn";
 
 function SwapBasicSection() {
@@ -28,6 +31,9 @@ function SwapBasicSection() {
 		isLoadingTransaction,
 		isLoadingQuote,
 		setGetNewQuote,
+		destinationTokenValuePerUsd,
+		originTokenValuePerUsd,
+		usdcValue,
 	} = useContext(TransactionDataContext);
 	const { setVisible: setModalVisible } = useWalletModal();
 
@@ -75,9 +81,21 @@ function SwapBasicSection() {
 						showTokenList={openDrawer}
 						showTokensInWallet={true}
 						urlParameter="originToken"
+						usdcValue={usdcValue}
+						tokenValuePerUsdc={originTokenValuePerUsd}
 					></CoinInput>
 				</div>
 				<div className="divider pt-2  md:pb-6 md:pt-6">
+					{usdcValue > 0 && (
+						<div className="text-xs font-secondary">
+							<div>
+								TOTAL <span className="font-bold  text-yellow-600">USDC</span>{" "}
+								VALUE:{" "}
+								<span className="font-bold  text-yellow-600">{usdcValue}</span>
+							</div>
+						</div>
+					)}
+
 					<SwapInputsBtn></SwapInputsBtn>
 				</div>
 				<div>
@@ -92,6 +110,7 @@ function SwapBasicSection() {
 						urlParameter="destinationToken"
 						showTokensInWallet={true}
 						showRefreshPrice={{ value: true, getNewQuote: setGetNewQuote }}
+						tokenValuePerUsdc={destinationTokenValuePerUsd}
 					></CoinInput>
 				</div>
 				<StartSwapBtn></StartSwapBtn>

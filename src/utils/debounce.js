@@ -15,7 +15,7 @@ function debounce(valueWhenChecked, valueNow, delay = 300, cb) {
 	valueWhenChecked.current = valueNow;
 
 	debounce.timeoutId = setTimeout(function () {
-		if (valueNow == "") return;
+		if (valueNow == "" || parseFloat(valueNow) == 0) return;
 		if (valueNow == valueWhenChecked.current) {
 			cb();
 		}

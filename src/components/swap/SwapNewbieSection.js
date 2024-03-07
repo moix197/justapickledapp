@@ -53,7 +53,7 @@ function SwapNewbieSection(props) {
 	];
 
 	return (
-		<div className="min-h-screen bg-fade bg-no-repeat bg-cover bg-center flex flex-col justify-start items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
+		<div className="min-h-[calc(100vh-96px)] bg-fade bg-no-repeat bg-cover bg-center flex flex-col justify-start items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
 			<div className="w-full flex flex-col justify-center items-center">
 				<div className="mt-2 md:mt-8">
 					<Timeline

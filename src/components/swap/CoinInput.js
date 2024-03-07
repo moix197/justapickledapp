@@ -23,6 +23,8 @@ const CoinInput = ({
 	showRefreshPrice = { value: false, getNewQuote: () => {} },
 	urlParameter,
 	showTokensInWallet = false,
+	usdcValue = false,
+	tokenValuePerUsdc = false,
 	showTokenList = () => {},
 }) => {
 	const router = useRouter();
@@ -78,6 +80,12 @@ const CoinInput = ({
 						}}
 					></InWalletTokens>
 				)}
+
+				{tokenValuePerUsdc && (
+					<div className="text-xs mb-2 w-full flex justify-center md:justify-end text-secondary">
+						<div>1 {`${token?.symbol} = ${tokenValuePerUsdc}`} USDC</div>
+					</div>
+				)}
 				<div className="w-full">
 					<div>
 						<TokenTextInput
@@ -125,16 +133,18 @@ const CoinInput = ({
 						value={amount}
 						disabled={disable}
 					/>
-					{showRefreshPrice?.value == true && (
-						<RefreshPriceBtn></RefreshPriceBtn>
-					)}
-					{showQuickBtns && (
-						<QuickAmountBtns
-							selectedToken={token}
-							setAmount={setAmount}
-							isLoading={isLoading}
-						/>
-					)}
+					<div className="flex grow justify-end">
+						{showRefreshPrice?.value == true && (
+							<RefreshPriceBtn></RefreshPriceBtn>
+						)}
+						{showQuickBtns && (
+							<QuickAmountBtns
+								selectedToken={token}
+								setAmount={setAmount}
+								isLoading={isLoading}
+							/>
+						)}
+					</div>
 				</label>
 			</div>
 			<div
@@ -174,9 +184,6 @@ const CoinInput = ({
 							}}
 						></TokenList>
 					</div>
-				</div>
-				<div className="hidden md:block text-secondary top-full left-0 text-center w-full bg-gray-800 p-1 text-[11px] uppercase">
-					scroll to see more
 				</div>
 			</div>
 		</div>

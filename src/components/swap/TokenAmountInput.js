@@ -51,7 +51,7 @@ function TokenAmountInput({
 	}
 
 	return (
-		<label className="input input-bordered border-fourth flex items-center gap-2 w-full overflow-hidden mt-2 pl-2 pr-2">
+		<label className="input input-bordered border-fourth flex items-end gap-2 w-full overflow-hidden mt-2 pl-2 pr-2">
 			{isLoadingQuote && (
 				<span className="loading loading-ring loading-md text-third"></span>
 			)}
@@ -78,14 +78,16 @@ function TokenAmountInput({
 				value={amount}
 				disabled={disabled}
 			/>
-			{showRefreshPrice?.value == true && <RefreshPriceBtn></RefreshPriceBtn>}
-			{showQuickBtns && (
-				<QuickAmountBtns
-					selectedToken={token}
-					setAmount={setAmount}
-					isLoading={isLoadingQuote}
-				/>
-			)}
+			<div className="grow">
+				{showRefreshPrice?.value == true && <RefreshPriceBtn></RefreshPriceBtn>}
+				{showQuickBtns && (
+					<QuickAmountBtns
+						selectedToken={token}
+						setAmount={setAmount}
+						isLoading={isLoadingQuote}
+					/>
+				)}
+			</div>
 		</label>
 	);
 }

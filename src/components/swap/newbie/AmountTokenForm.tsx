@@ -42,6 +42,8 @@ const CoinInput = ({
 		isLoadingQuote,
 		setGetNewQuote,
 		setTransactionSignature,
+		destinationTokenValuePerUsd,
+		originTokenValuePerUsd,
 	} = useContext(TransactionDataContext);
 
 	useEffect(() => {
@@ -98,13 +100,14 @@ const CoinInput = ({
 	}
 
 	function showCorrectModalContent() {
-		if (transactionSignature && transactionSignature?.value != "error") {
+		if (transactionSignature && transactionSignature?.type != "error") {
 			return (
-				<SuccessScreenContent tx={transactionSignature}></SuccessScreenContent>
+				<SuccessScreenContent
+					tx={transactionSignature.txid}
+				></SuccessScreenContent>
 			);
-		} else if (transactionSignature && transactionSignature?.value == "error") {
+		} else if (transactionSignature && transactionSignature?.type == "error") {
 			setGetNewQuote(true);
-			setTransactionSignature(null);
 		} else if (isLoadingTransaction) {
 			return <WaitingForTransactionContent></WaitingForTransactionContent>;
 		}
@@ -178,6 +181,14 @@ const CoinInput = ({
 						<div className="mb-2 font-bold">
 							<div className="text-lg md:text-3xl text-red-400 ">{amount}</div>
 							<div className="text-xs md:text-md text-red-400">{`${originTokenData.symbol}`}</div>
+							{originTokenData.symbol != "USDC" && (
+								<div className="font-normal text-xs mt-1">
+									<div>
+										1
+										{` ${originTokenData.symbol} = ${originTokenValuePerUsd} USDC`}
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 					<div className="w-6/12">
@@ -196,14 +207,21 @@ const CoinInput = ({
 								)}
 							</div>
 							<div className="text-xs md:text-md  text-third">{`${destinationTokenData.symbol}`}</div>
+							<div className="font-normal text-xs mt-1">
+								{destinationTokenData.symbol != "USDC" && (
+									<div>
+										1
+										{` ${destinationTokenData.symbol} = ${destinationTokenValuePerUsd} USDC`}
+									</div>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
 				<div>
 					<div
 						onClick={() => {
-							//clickEvent();
-							//setModalStatus(false);
+							setGetNewQuote(true);
 						}}
 					>
 						<BasicButton

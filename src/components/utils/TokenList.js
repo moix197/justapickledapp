@@ -8,6 +8,7 @@ const TokenList = ({
 }) => {
 	const [dataContent, setDataContent] = useState([]);
 	const [scrolledPage, setScrolledPage] = useState(1);
+	const [scroll, setScroll] = useState(0);
 
 	useEffect(() => {
 		if (tokenData.length > 25) {
@@ -24,6 +25,9 @@ const TokenList = ({
 	function handleScroll(e) {
 		const { scrollTop, scrollHeight, clientHeight } = e.target;
 		let loadWhen = scrollTop + clientHeight + 100;
+
+		setScroll(scrollTop);
+
 		if (loadWhen >= scrollHeight) {
 			setScrolledPage(scrolledPage + 1);
 		}
@@ -67,6 +71,14 @@ const TokenList = ({
 					</li>
 				))}
 			</ul>
+			<div
+				className={`absolute top-[calc(100%-16px)]
+				text-secondary left-0 text-center w-full bg-gray-800 p-[1px] text-[10px] uppercase ${
+					scroll > 1 && "hidden"
+				}`}
+			>
+				scroll to see more
+			</div>
 		</div>
 	);
 };

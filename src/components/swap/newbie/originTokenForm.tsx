@@ -47,6 +47,10 @@ const OriginTokenForm = ({
 	}, [rawTokensData]);
 
 	useEffect(() => {
+		resetTokenData();
+	}, [urlParameter]);
+
+	useEffect(() => {
 		document.getElementsByTagName("body")[0].style.overflow = isModalOpen
 			? "hidden"
 			: "scroll-y";
@@ -140,7 +144,7 @@ const OriginTokenForm = ({
 					</div>
 					<div>and select one from the list below</div>
 				</div>
-				<div className="h-96">
+				<div className="h-[300px]">
 					<TokenList
 						tokenData={filteredTokenData}
 						selectedToken={activeToken}

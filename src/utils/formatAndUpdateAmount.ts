@@ -2,7 +2,8 @@ function addCommasToAmount(value,decimals) {
 	if(value == "0") return "0";
 	if (/^[0-9,.]*$/.test(value)) {
 		// Remove commas
-		const cleanValue = value.replace(/\,/g, "");
+
+		const cleanValue = value?.replace(/\,/g, "");
 
 		// Split into integer and fractional parts
 		let [integerPart, fractionalPart] = cleanValue.split(".");
@@ -29,6 +30,7 @@ function addCommasToAmount(value,decimals) {
 }
 
 function removeCommasFromAmount(value) {
+	if(!value) return;
 	return value.replace(/,/g, "");
 }
 

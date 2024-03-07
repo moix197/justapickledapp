@@ -1,5 +1,5 @@
 import { VersionedTransaction } from "@solana/web3.js";
-import { notify } from "utils/notifications";
+import { confirmTransaction } from "services/confirmTransaction";
 
 async function postSwapTransaction(quote, wallet, connection) {
 	try {
@@ -16,53 +16,48 @@ async function postSwapTransaction(quote, wallet, connection) {
 				userPublicKey: wallet.publicKey,
 			}),
 		});
+
 		let data = await response.json();
 		let transaction = VersionedTransaction.deserialize(data.data);
-		//let signedTransaction = await wallet.signTransaction(transaction);
-		//console.log(signedTransaction);
-		//let rawTransaction = transaction;
 		let signature = await wallet.sendTransaction(transaction, connection);
-		let conn = await connection.confirmTransaction(signature, "processed");
+		let dataConfirmed = confirmTransaction(signature);
 
-		//let final = signedTransaction.serialize();
-		//console.log(final);
-		/*let urlTransaction = "/api/sendTransaction";
-		let responseTransaction = await fetch(urlTransaction, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				// quoteResponse from /quote api
-				signedTransaction: rawTransaction,
-				esto: "esteee",
-				// user public key to be used for the swap
-			}),
-		});*/
-
-		if (conn?.value?.err) {
-			notify({
+		if (dataConfirmed?.value?.err) {
+			/*notify({
 				type: "error",
 				message: "Failed to Confirm the transaction!",
 				description: conn.value.err,
-			});
-			return { value: "error" };
+			});*/
+			return {
+				type: "error",
+				message: "Failed to confirm the transaction",
+				description: dataConfirmed?.value?.error,
+			};
 		}
-		notify({
+
+		/*notify({
 			type: "success",
 			message: "Transaction successful!",
 			txid: signature,
-		});
-		return { value: "success", txid: signature };
+		});*/
+		return {
+			type: "success",
+			message: "Transaction successful!",
+			txid: signature,
+		};
 	} catch (error) {
 		console.log("error");
 		console.log(error);
-		notify({
+		/*notify({
 			type: "error",
 			message: `Transaction failed!`,
 			description: error?.message,
-		});
-		return { value: "error" };
+		});*/
+		return {
+			type: "error",
+			message: `Transaction failed!`,
+			description: error?.message,
+		};
 	}
 }
 

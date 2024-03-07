@@ -56,6 +56,11 @@ export default function TokensInAccountContainer({ children }) {
 			connection
 		);
 
+		console.log(userPublicKey.toString());
+		console.log(newTokenAccounts);
+		console.log(oldTokenAccounts);
+		console.log("oka");
+
 		if (oldTokenAccounts?.value && newTokenAccounts?.value) {
 			let newAry = [...oldTokenAccounts?.value, ...newTokenAccounts?.value];
 			oldTokenAccounts["value"] = newAry;
