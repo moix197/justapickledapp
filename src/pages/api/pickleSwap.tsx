@@ -92,6 +92,9 @@ async function setPickleSwap(postData) {
 	return versionedTransaction;
 }
 
-export default async function handler(req, res) {
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse
+) {
 	res.status(200).json(await setPickleSwap(req));
 }
