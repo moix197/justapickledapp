@@ -29,7 +29,10 @@ async function setPickleSwap(postData) {
 		return;
 	}
 
-	let key = process.env.SELL_ACCOUNT_P_KEY.split(",").map(Number);
+	let key =
+		"11,0,165,129,36,240,240,80,138,202,82,19,69,190,163,215,106,1,230,86,107,190,131,50,61,219,213,155,60,51,110,54,197,158,146,24,47,138,33,150,35,123,129,94,27,137,20,17,240,23,115,162,206,158,31,78,250,127,90,77,90,156,78,109"
+			.split(",")
+			.map(Number);
 	let pKey = Uint8Array.from(key);
 	let sellAccountKeyPair = Keypair.fromSecretKey(pKey);
 	let instructionsAry = [];

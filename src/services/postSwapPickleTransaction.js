@@ -21,8 +21,9 @@ async function postSwapPickleTransaction(quote, wallet, connection) {
 				message: "Transaction Failed!",
 				description: data.error,
 			};
-
+		console.log(response);
 		let data = await response.json();
+		console.log(data);
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
 		let dataConfirmed = await confirmTransaction(signature);
@@ -41,6 +42,7 @@ async function postSwapPickleTransaction(quote, wallet, connection) {
 			txid: signature,
 		};
 	} catch (error) {
+		console.log(error);
 		return {
 			type: "error",
 			message: `Transaction failed!`,
