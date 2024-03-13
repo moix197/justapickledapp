@@ -5,7 +5,6 @@ import { getOrCreateAssociatedTokenAccountFunc } from "utils/getOrCreateAssociat
 import {
 	mintPublicKey,
 	pickleTokenAddress,
-	//sellAccountKeyPair,
 	sellAccountPublicKey,
 	sellAssociatedAccountPublicKey,
 	solTokenAddress,
@@ -21,26 +20,7 @@ import { getFinalSwapAmount } from "utils/getFinalSwapAmount";
 import { getJupQuote } from "services/getJupQuote";
 
 async function setPickleSwap(postData) {
-	let k = process.env.SELL_ACCOUNT_P_KEY;
-	let key = k.split(",");
-	let pKey = Uint8Array.from(key);
-
-	let sellAccountKeyPair = new Keypair({
-		publicKey: sellAccountPublicKey,
-		secretKey: pKey,
-	});
-
-	let instructionsAry = [];
-	let inAmount = 0;
-	let outAmount = 0;
 	let quote = postData.body.quote;
-	let ownerPublicKey = new PublicKey(postData.body.userPublicKey);
-
-	let newQuote = await getJupQuote(
-		solTokenAddress,
-		pickleTokenAddress,
-		quote?.inAmount
-	);
 
 	if (
 		quote?.inputMint != solTokenAddress ||
@@ -48,6 +28,20 @@ async function setPickleSwap(postData) {
 	) {
 		return;
 	}
+
+	let key = process.env.SELL_ACCOUNT_P_KEY.split(",").map(Number);
+	let pKey = Uint8Array.from(key);
+	let sellAccountKeyPair = Keypair.fromSecretKey(pKey);
+	let instructionsAry = [];
+	let inAmount = 0;
+	let outAmount = 0;
+	let ownerPublicKey = new PublicKey(postData.body.userPublicKey);
+
+	let newQuote = await getJupQuote(
+		solTokenAddress,
+		pickleTokenAddress,
+		quote?.inAmount
+	);
 
 	if (newQuote?.error) {
 		return {
