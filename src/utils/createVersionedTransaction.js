@@ -6,7 +6,7 @@ import {
 import { connection } from "./connection.js";
 
 async function createVersionedTransaction(instruction, payer, signer) {
-	const PRIORITY_RATE = 0; // MICRO_LAMPORTS
+	const PRIORITY_RATE = 100; // MICRO_LAMPORTS
 	const PRIORITY_FEE_IX = ComputeBudgetProgram.setComputeUnitPrice({
 		microLamports: PRIORITY_RATE,
 	});
