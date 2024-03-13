@@ -29,7 +29,7 @@ function Timeline({ activeItem = null, clickEvent = (item) => {} }) {
 	} = useContext(TransactionDataContext);
 
 	return (
-		<div className="tracking-wide mb-4">
+		<div className="tracking-wide ">
 			<div className="w-full flex justify-center">
 				<div className="text-center max-w-xs text-xs mb-2 uppercase">
 					<div>

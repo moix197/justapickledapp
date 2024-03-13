@@ -9,6 +9,7 @@ import { addCommasToAmount } from "utils/formatAndUpdateAmount";
 import InWalletTokens from "./InWalletTokens";
 import { setUrlFromInput } from "utils/setUrlFromInput";
 import { RefreshPriceBtn } from "./RefreshPriceBtn";
+import { TokenAmountInput } from "components/swap/inputs/tokenAmountInput";
 
 const CoinInput = ({
 	handleChange,
@@ -106,6 +107,8 @@ const CoinInput = ({
 						></TokenTextInput>
 					</div>
 				</div>
+				{/*<TokenAmountInput urlParameter={urlParameter}></TokenAmountInput>
+				 */}
 				<label className="input input-bordered border-fourth flex items-center gap-2 w-full overflow-hidden mt-2 pl-2 pr-2">
 					{isLoading && (
 						<span className="loading loading-ring loading-md text-third"></span>

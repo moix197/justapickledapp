@@ -13,12 +13,12 @@ function setUrlFromInput(urlParameter, item, router) {
         router.query["originToken"] = router.query["destinationToken"];
         router.query[urlParameter] = item?.address;
     }
-
     router.query[urlParameter] = item?.address;
     router.push({
         pathname: "/swap",
         query: router.query,
     });
+    return ;
 }
 
-export {setUrlFromInput}
+export { setUrlFromInput };

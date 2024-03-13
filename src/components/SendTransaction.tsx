@@ -29,8 +29,6 @@ export const SendTransaction: FC = () => {
 			// anything below this will fail, as this would be below the rent-exemption rate.
 			const amount = 1_000_000;
 
-			console.log(amount);
-
 			const transaction = new Transaction().add(
 				SystemProgram.transfer({
 					fromPubkey: publicKey,

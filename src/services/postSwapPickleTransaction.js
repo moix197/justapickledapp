@@ -1,27 +1,31 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { confirmTransaction } from "services/confirmTransaction";
 
-async function postSwapTransaction(quote, wallet, connection) {
+async function postSwapPickleTransaction(quote, wallet, connection) {
 	try {
-		let url = "/api/swap";
+		let url = "/api/pickleSwap";
 		let response = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				// quoteResponse from /quote api
-				quoteResponse: quote,
-				// user public key to be used for the swap
 				userPublicKey: wallet.publicKey,
+				quote: quote,
 			}),
 		});
 
+		if (data?.error)
+			return {
+				type: "error",
+				message: "Transaction Failed!",
+				description: data.error,
+			};
+
 		let data = await response.json();
-		console.log(data.data);
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
-		let dataConfirmed = confirmTransaction(signature);
+		let dataConfirmed = await confirmTransaction(signature);
 
 		if (dataConfirmed?.value?.err) {
 			return {
@@ -37,9 +41,6 @@ async function postSwapTransaction(quote, wallet, connection) {
 			txid: signature,
 		};
 	} catch (error) {
-		console.log("error");
-		console.log(error);
-
 		return {
 			type: "error",
 			message: `Transaction failed!`,
@@ -48,4 +49,4 @@ async function postSwapTransaction(quote, wallet, connection) {
 	}
 }
 
-export { postSwapTransaction };
+export { postSwapPickleTransaction };

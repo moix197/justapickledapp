@@ -1,38 +1,26 @@
 // Next, React
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import Link from "next/link";
 
-// Wallet
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-
-// Components
-import { RequestAirdrop } from "../../components/RequestAirdrop";
-import { SendTransaction } from "../../components/SendTransaction";
-
-// Store
-import useUserSOLBalanceStore from "../../stores/useUserSOLBalanceStore";
+import { BasicButton } from "components/buttons/Basic";
+import ValueMeter from "components/ValueMeter/ValueMeter";
 
 export const HomeView: FC = ({}) => {
-	const wallet = useWallet();
-	const { connection } = useConnection();
-
-	const balance = useUserSOLBalanceStore((s) => s.balance);
-	const { getUserSOLBalance } = useUserSOLBalanceStore();
-
-	useEffect(() => {
-		if (wallet.publicKey) {
-			console.log(wallet.publicKey.toBase58());
-			getUserSOLBalance(wallet.publicKey, connection);
-		}
-	}, [wallet.publicKey, connection, getUserSOLBalance]);
-
 	return (
-		<div className="md:hero mx-auto p-4 w-full h-full flex justify-center items-center">
-			<Link href="/swap">
-				<div className="bg-fourth p-8 font-bold rounded-lg cursor-pointer transition-transform hover:scale-105 hover:shadow-third">
-					GO TO SWAP
+		<div className="min-h-[calc(100vh-69px)] mx-auto p-4 w-full flex justify-center items-center">
+			<div className="max-w-full w-[400px] flex flex-col items-center">
+				<ValueMeter></ValueMeter>
+				<div className="text-center mb-6 uppercase tracking-wider">
+					<div>
+						Everyday there's less tokens left in the pool, don't miss the
+						opportunity to get some extra{" "}
+						<span className="text-third font-bold">$Pickle</span>
+					</div>
 				</div>
-			</Link>
+				<Link href="/swap">
+					<BasicButton className="p-10">GO TO SWAP</BasicButton>
+				</Link>
+			</div>
 		</div>
 	);
 };

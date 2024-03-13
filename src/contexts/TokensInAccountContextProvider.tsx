@@ -17,7 +17,6 @@ export default function TokensInAccountContainer({ children }) {
 	const connection = new Connection(
 		"https://withered-orbital-sailboat.solana-mainnet.quiknode.pro/ac33801cbf8e7a422bfc7ecbc7843f202e53fa60/"
 	);
-	//const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 	useEffect(() => {
 		let storage;
@@ -55,11 +54,6 @@ export default function TokensInAccountContainer({ children }) {
 			TOKEN_2022_PROGRAM_ID,
 			connection
 		);
-
-		console.log(userPublicKey.toString());
-		console.log(newTokenAccounts);
-		console.log(oldTokenAccounts);
-		console.log("oka");
 
 		if (oldTokenAccounts?.value && newTokenAccounts?.value) {
 			let newAry = [...oldTokenAccounts?.value, ...newTokenAccounts?.value];

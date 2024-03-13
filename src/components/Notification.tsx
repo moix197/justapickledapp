@@ -18,7 +18,7 @@ const NotificationList = () => {
 
 	return (
 		<div
-			className={`z-20 fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6`}
+			className={`z-30 fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm`}
 		>
 			<div className={`flex flex-col w-full`}>
 				{reversedNotifications.map((n, idx) => (
@@ -63,7 +63,7 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 
 	return (
 		<div
-			className={`relative max-w-sm w-full bg-gray-900 border ${
+			className={`relative max-w-sm w-10/12 bg-gray-900 border ${
 				type == "error" ? "border-error" : "border-third"
 			}  shadow-lg rounded-md mt-2 pointer-events-auto ring-1 ring-black ring-opacity-5 p-2 mx-4 mb-12 overflow-hidden`}
 		>

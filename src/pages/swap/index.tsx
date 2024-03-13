@@ -8,7 +8,7 @@ import { WalletDataContainer } from "contexts/WalletDataContextProvider";
 import { RouterContainer } from "contexts/RouterContextProvider";
 import InitialSwapScreen from "components/swap/InitialSwapScreen";
 
-const Home: NextPage = (props) => {
+const SwapIndex: NextPage = (props) => {
 	return (
 		<RouterContainer>
 			<WalletDataContainer>
@@ -24,4 +24,4 @@ const Home: NextPage = (props) => {
 	);
 };
 
-export default Home;
+export default SwapIndex;

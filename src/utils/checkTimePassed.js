@@ -1,5 +1,4 @@
 function checkTimePassed(timeString) {
-	console.log(timeString);
 	if (!timeString) return;
 
 	// Convert the input UTC date string to a Date object

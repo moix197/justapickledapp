@@ -4,8 +4,10 @@ import Link from "next/link";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { LogoBg } from "./brand/Logo";
 import SwitchLayoutBtn from "./SwitchLayoutBtn";
-
+import { useRouter } from "next/router";
 export const AppBar: FC = (props) => {
+	const router = useRouter();
+
 	return (
 		<div>
 			{/* NavBar / Header */}
@@ -27,8 +29,7 @@ export const AppBar: FC = (props) => {
 
 				{/* Wallet & Settings */}
 				<div className="navbar-end w-8/12 md:w-[50%]">
-					<SwitchLayoutBtn></SwitchLayoutBtn>
-
+					{router.pathname == "/swap" && <SwitchLayoutBtn></SwitchLayoutBtn>}
 					<WalletMultiButton />
 				</div>
 			</div>

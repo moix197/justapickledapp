@@ -1,6 +1,5 @@
 async function getAllTokens() {
 	let tokensURL = "https://token.jup.ag/all";
-	console.log("fetching all tokens");
 	let response = await fetch(tokensURL);
 	let data = await response.json();
 

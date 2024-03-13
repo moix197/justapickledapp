@@ -13,6 +13,7 @@ export default function RouterContainer({ children }) {
 	const router = useRouter();
 
 	useEffect(() => {
+		if (router.pathname != "/swap") return;
 		if (
 			newSearchParams.get("originToken") &&
 			newSearchParams.get("destinationToken") &&
