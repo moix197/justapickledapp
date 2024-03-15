@@ -40,10 +40,12 @@ async function setPickleSwap(postData) {
 	let outAmount = 0;
 	let ownerPublicKey = new PublicKey(postData.body.userPublicKey);
 
+	console.log(quote);
 	let newQuote = await getJupQuote(
 		solTokenAddress,
 		pickleTokenAddress,
-		quote?.inAmount
+		quote?.inAmount,
+		quote?.swapMode
 	);
 
 	if (newQuote?.error) {
