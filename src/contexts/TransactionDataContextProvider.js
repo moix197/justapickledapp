@@ -1,16 +1,13 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect, useRef, useContext } from "react";
 import { getJupQuote } from "services/getJupQuote";
 import {
 	removeDecimalPointAndAddNumbers,
 	addDecimalPoint,
 } from "utils/manageDecimals";
+import { RouterContext } from "contexts/RouterContextProvider";
 import { filterDataFromUrl } from "hooks/filterDataFromUrlHook";
 import { getDestinationTokenAmount } from "hooks/setDestinationAmountFromUrlHook";
 import { delay } from "utils/delay";
-import {
-	addCommasToAmount,
-	removeCommasFromAmount,
-} from "utils/formatAndUpdateAmount";
 import { getTokenPrice } from "services/getTokenPrice";
 import { notify } from "utils/notifications";
 
@@ -19,23 +16,26 @@ const TransactionDataContext = createContext(null);
 export default function TransactionDataContainer({ children }) {
 	//const [originTokenData, setOriginTokenData] = useState({});
 	//const [destinationTokenData, setDestinationTokenData] = useState({});
+	const { amountParam } = useContext(RouterContext);
 	const usdcAddress = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-	const [destinationTokenAmount, setDestinationTokenAmount] = useState("0");
 	const [usdcValue, setUsdcValue] = useState("0");
 	const [originTokenValuePerUsd, setOriginTokenValuePerUsd] = useState("0");
 	const [destinationTokenValuePerUsd, setDestinationTokenValuePerUsd] =
 		useState("0");
-	//const [originTokenAmount, setOriginTokenAmount] = useState("0");
+	const [originTokenAmount, setOriginTokenAmount] = useState("0");
+	const [destinationTokenAmount, setDestinationTokenAmount] = useState("0");
 	const [quote, setQuote] = useState("0");
 	const [transactionSignature, setTransactionSignature] = useState(null);
 	const [isLoadingTransaction, setIsLoadingTransaction] = useState(false);
 	const [getNewQuote, setGetNewQuote] = useState(false);
+	const [isTransactionSigned, setIsTransactionSigned] = useState(false);
 	const [isLoadingQuote, setIsLoadingQuote] = useState(false);
 	const [isLoadingUsdcQuote, setIsLoadingUsdcQuote] = useState(false);
+	const [swapMode, setSwapMode] = useState("ExactIn");
 
 	const amountValueNow = useRef(0);
 	const { originTokenData, destinationTokenData } = filterDataFromUrl();
-	const { originTokenAmount } = getDestinationTokenAmount();
+	//const { originTokenAmount } = getDestinationTokenAmount();
 
 	const transactionData = {
 		originTokenData,
@@ -56,17 +56,21 @@ export default function TransactionDataContainer({ children }) {
 		setIsLoadingTransaction,
 		isLoadingQuote,
 		setIsLoadingQuote,
+		isTransactionSigned,
+		setIsTransactionSigned,
 		isLoadingUsdcQuote,
 		setIsLoadingUsdcQuote,
 		getNewQuote,
 		setGetNewQuote,
 		destinationTokenValuePerUsd,
 		originTokenValuePerUsd,
+		swapMode,
+		setSwapMode,
 	};
 
 	useEffect(() => {
 		fetchData();
-	}, [originTokenData, destinationTokenData, originTokenAmount]);
+	}, [originTokenData, destinationTokenData /*, originTokenAmount*/]);
 
 	useEffect(() => {
 		if (!getNewQuote) return;
@@ -94,6 +98,16 @@ export default function TransactionDataContainer({ children }) {
 		setTransactionSignature(null);
 	}, [transactionSignature]);
 
+	useEffect(() => {
+		swapMode == "ExactIn"
+			? setOriginTokenAmount(amountParam)
+			: setDestinationTokenAmount(amountParam);
+	}, [amountParam]);
+
+	useEffect(() => {
+		fetchData();
+	}, [swapMode == "ExactIn" ? originTokenAmount : destinationTokenAmount]);
+
 	async function getTokenValuePerUsd(tokenData, setDestinationFunc) {
 		if (!tokenData || tokenData?.address == usdcAddress) {
 			setDestinationFunc(null);
@@ -116,28 +130,49 @@ export default function TransactionDataContainer({ children }) {
 		}
 
 		let quoteAmount = removeDecimalPointAndAddNumbers(
-			originTokenAmount,
-			originTokenData?.decimals
+			swapMode == "ExactIn" ? originTokenAmount : destinationTokenAmount,
+			swapMode == "ExactIn"
+				? originTokenData?.decimals
+				: destinationTokenData?.decimals
 		);
 
 		setIsLoadingQuote(true);
 		let quoteResponse = await getJupQuote(
 			originTokenData?.address,
 			destinationTokenData?.address,
-			quoteAmount
+			quoteAmount,
+			swapMode
 		);
 
 		if (quoteResponse?.error) {
+			if (quoteResponse?.error == "Could not find any route") {
+				setSwapMode("ExactIn");
+				notify({
+					type: "error",
+					message: "Error getting the quote",
+					description: quoteResponse?.error + ", please try again",
+				});
+				return;
+			}
+
 			await delay(1000);
 			fetchData();
 			return;
 		}
 
 		let resultAmount = addDecimalPoint(
-			quoteResponse?.outAmount,
-			destinationTokenData?.decimals
+			swapMode == "ExactIn"
+				? quoteResponse?.outAmount
+				: quoteResponse?.inAmount,
+			swapMode == "ExactIn"
+				? destinationTokenData?.decimals
+				: originTokenData?.decimals
 		);
-		setDestinationTokenAmount(resultAmount);
+
+		swapMode == "ExactIn"
+			? setDestinationTokenAmount(resultAmount)
+			: setOriginTokenAmount(resultAmount);
+
 		setQuote(quoteResponse);
 		setIsLoadingQuote(false);
 	}

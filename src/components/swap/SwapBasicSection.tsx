@@ -29,10 +29,15 @@ function SwapBasicSection() {
 		destinationTokenValuePerUsd,
 		originTokenValuePerUsd,
 		usdcValue,
+		setSwapMode,
+		swapMode,
 	} = useContext(TransactionDataContext);
 	const { setVisible: setModalVisible } = useWalletModal();
 
-	function originCoinChange(tokenData, amount) {
+	function originCoinChange(tokenData, amount, inputType) {
+		if (inputType == "origin" && swapMode == "ExactOut") return;
+		if (inputType == "destination" && swapMode == "ExactIn") return;
+
 		debounce(amountValueNow, amount, 1000, async () => {
 			router.query["amount"] = removeCommasFromAmount(amount);
 			router.push({
@@ -49,29 +54,26 @@ function SwapBasicSection() {
 	return (
 		<div className="min-h-[calc(100vh-69px)] bg-fade bg-no-repeat bg-cover bg-center flex justify-center items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
 			<div className="w-[800px] relative max-w-full flex justify-center flex flex-col">
-				{isLoadingTransaction && (
-					<LoadingScreen
-						title="Check your wallet"
-						description="waiting for transaction"
-					></LoadingScreen>
-				)}
+				{isLoadingTransaction && <LoadingScreen></LoadingScreen>}
 				<NotiAlert></NotiAlert>
 				<div>
 					<CoinInput
 						handleChange={(tokenData, amount) =>
-							originCoinChange(tokenData, amount)
+							originCoinChange(tokenData, amount, "origin")
 						}
 						isLoading={isLoadingQuote}
 						tokenListFirst={true}
 						text="you spend"
 						showQuickBtns={userPublicKey ? true : false}
 						token={originTokenData}
-						urlAmount={originTokenAmount}
+						givenAmount={originTokenAmount}
 						showTokenList={openDrawer}
 						showTokensInWallet={true}
 						urlParameter="originToken"
-						usdcValue={usdcValue}
 						tokenValuePerUsdc={originTokenValuePerUsd}
+						setMode={(val) => {
+							setSwapMode(val);
+						}}
 					></CoinInput>
 				</div>
 				<div className="divider pt-2  md:pb-6 md:pt-6">
@@ -89,7 +91,9 @@ function SwapBasicSection() {
 				</div>
 				<div>
 					<CoinInput
-						handleChange={(valuTokenData) => {}}
+						handleChange={(tokenData, amount) =>
+							originCoinChange(tokenData, amount, "destination")
+						}
 						givenAmount={destinationTokenAmount}
 						isLoading={isLoadingQuote}
 						text="To get"
@@ -100,6 +104,9 @@ function SwapBasicSection() {
 						showTokensInWallet={true}
 						showRefreshPrice={{ value: true, getNewQuote: setGetNewQuote }}
 						tokenValuePerUsdc={destinationTokenValuePerUsd}
+						setMode={(val) => {
+							setSwapMode(val);
+						}}
 					></CoinInput>
 				</div>
 				<StartSwapBtn></StartSwapBtn>

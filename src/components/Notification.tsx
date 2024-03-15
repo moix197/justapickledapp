@@ -54,7 +54,7 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 	useEffect(() => {
 		const id = setTimeout(() => {
 			onHide();
-		}, 10000);
+		}, 15000);
 
 		return () => {
 			clearInterval(id);
@@ -111,7 +111,7 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 											d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
 										></path>
 									</svg>
-									<div className="flex mx-4">
+									<div className="flex mx-4 text-yellow-600">
 										{txid.slice(0, 8)}...
 										{txid.slice(txid.length - 8)}
 									</div>

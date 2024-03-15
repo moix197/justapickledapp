@@ -3,7 +3,7 @@ import {
 	TransactionMessage,
 	VersionedTransaction,
 } from "@solana/web3.js";
-import { connection } from "./connection.js";
+import { connection } from "pages/api/utils/connection";
 
 async function createVersionedTransaction(instruction, payer, signer) {
 	const PRIORITY_RATE = 100; // MICRO_LAMPORTS
@@ -26,8 +26,6 @@ async function createVersionedTransaction(instruction, payer, signer) {
 	const transaction = new VersionedTransaction(messageV0);
 	//transaction.sign([payer]);
 	if (signer) transaction.sign([signer]);
-
-	console.log(transaction);
 
 	let serializedTransaction = transaction.serialize();
 	let rawTransaction = Buffer.from(serializedTransaction, "base64");

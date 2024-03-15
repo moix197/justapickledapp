@@ -1,7 +1,12 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { confirmTransaction } from "services/confirmTransaction";
 
-async function postSwapPickleTransaction(quote, wallet, connection) {
+async function postSwapPickleTransaction(
+	quote,
+	wallet,
+	connection,
+	setTransactionSigned
+) {
 	try {
 		let url = "/api/pickleSwap";
 		let response = await fetch(url, {
@@ -21,18 +26,20 @@ async function postSwapPickleTransaction(quote, wallet, connection) {
 				message: "Transaction Failed!",
 				description: data.error,
 			};
-		console.log(response);
 		let data = await response.json();
-		console.log(data);
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
+		setTransactionSigned(true);
 		let dataConfirmed = await confirmTransaction(signature);
 
+		console.log("confirmed data end");
+		console.log(dataConfirmed);
 		if (dataConfirmed?.value?.err) {
 			return {
 				type: "error",
 				message: "Failed to confirm the transaction",
 				description: dataConfirmed?.value?.error,
+				txid: dataConfirmed?.value?.txid,
 			};
 		}
 

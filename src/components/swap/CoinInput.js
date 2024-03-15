@@ -26,6 +26,7 @@ const CoinInput = ({
 	showTokensInWallet = false,
 	usdcValue = false,
 	tokenValuePerUsdc = false,
+	setMode = null,
 	showTokenList = () => {},
 }) => {
 	const router = useRouter();
@@ -36,10 +37,12 @@ const CoinInput = ({
 	const [amount, setAmount] = useState("0");
 
 	useEffect(() => {
-		let finalAmount = givenAmount
+		/*let finalAmount = givenAmount
 			? addCommasToAmount(givenAmount, token?.decimals)
-			: addCommasToAmount(amount, token?.decimals);
-		setAmount(finalAmount);
+			: addCommasToAmount(amount, token?.decimals);*/
+		//let finalAmount = addCommasToAmount(givenAmount, token?.decimals);
+		console.log(givenAmount);
+		setAmount(givenAmount);
 	}, [givenAmount]);
 
 	useEffect(() => {
@@ -119,9 +122,17 @@ const CoinInput = ({
 						className={`grow bg-primary 4 text-xl ${
 							isLoading && "opacity-0"
 						} text-secondary`}
+						onFocus={() => {
+							console.log(
+								urlParameter == "originToken" ? "ExactIn" : "ExactOut"
+							);
+							setMode &&
+								setMode(urlParameter == "originToken" ? "ExactIn" : "ExactOut");
+						}}
 						onChange={(e) => {
 							if (!/^[0-9,.]*$/.test(e.target.value)) return;
 							if (isLoading) return;
+
 							let amountWithCommas = addCommasToAmount(
 								e.target.value,
 								token?.decimals
@@ -134,7 +145,7 @@ const CoinInput = ({
 							}
 						}}
 						value={amount}
-						disabled={disable}
+						//disabled={disable}
 					/>
 					<div className="flex grow justify-end">
 						{showRefreshPrice?.value == true && (

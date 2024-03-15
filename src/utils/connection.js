@@ -1,10 +1,10 @@
-import { Connection, clusterApiUrl } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
 
 const connection = new Connection(
-	"https://withered-orbital-sailboat.solana-mainnet.quiknode.pro/ac33801cbf8e7a422bfc7ecbc7843f202e53fa60/",
+	"https://withered-orbital-sailboat.secure.quiknode.pro",
 	{
 		commitment: "confirmed",
-		confirmTransactionInitialTimeout: 60000,
+		confirmTransactionInitialTimeout: 30000,
 	}
 );
 export { connection };

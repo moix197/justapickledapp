@@ -6,8 +6,10 @@ const WalletDataContext = createContext(null);
 export default function WalletDataContainer({ children }) {
 	const [userPublicKey, setuserPublicKey] = useState(null);
 	const { publicKey } = useWallet();
+	const { wallet } = useWallet();
 
 	useEffect(() => {
+		console.log(wallet);
 		setuserPublicKey(publicKey);
 	}, [publicKey]);
 

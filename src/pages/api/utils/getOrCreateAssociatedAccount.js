@@ -1,12 +1,11 @@
 import {
 	ASSOCIATED_TOKEN_PROGRAM_ID,
-	TOKEN_2022_PROGRAM_ID,
 	createAssociatedTokenAccountInstruction,
 	getAccount,
 	getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
-import { connection } from "utils/connection";
+import { connection } from "pages/api/utils/connection";
 
 async function getOrCreateAssociatedTokenAccountFunc({
 	mintPublicKey,

@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState, useContext } from "react";
-import { Connection } from "@solana/web3.js";
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { TokenDataContext } from "contexts/TokenDataContextProvider";
@@ -14,9 +13,6 @@ export default function TokensInAccountContainer({ children }) {
 	const [isLoadingTokensInWallet, setIsLoadingTokensInWallet] = useState(false);
 	const [userPublicKey] = useContext(WalletDataContext);
 	const { rawTokensData } = useContext(TokenDataContext);
-	const connection = new Connection(
-		"https://withered-orbital-sailboat.solana-mainnet.quiknode.pro/ac33801cbf8e7a422bfc7ecbc7843f202e53fa60/"
-	);
 
 	useEffect(() => {
 		let storage;
@@ -46,13 +42,11 @@ export default function TokensInAccountContainer({ children }) {
 
 		let oldTokenAccounts = await getParsedTokenAccounts(
 			userPublicKey,
-			TOKEN_PROGRAM_ID,
-			connection
+			TOKEN_PROGRAM_ID
 		);
 		let newTokenAccounts = await getParsedTokenAccounts(
 			userPublicKey,
-			TOKEN_2022_PROGRAM_ID,
-			connection
+			TOKEN_2022_PROGRAM_ID
 		);
 
 		if (oldTokenAccounts?.value && newTokenAccounts?.value) {
@@ -66,13 +60,12 @@ export default function TokensInAccountContainer({ children }) {
 	useEffect(() => {
 		if (!walletTokenListRaw || walletTokenListProcesed?.length > 0) return;
 
-		// Assuming array1 and array2 are your two arrays
 		const propertyToCompare = "address";
 		const walletTokenListForSet = [];
 		const walletTokenListForAmounts = [];
 
-		for (let i = 0; i < walletTokenListRaw.value.length; i++) {
-			let item = walletTokenListRaw.value[i];
+		for (let i = 0; i < walletTokenListRaw?.value?.length; i++) {
+			let item = walletTokenListRaw?.value[i];
 			if (item.account?.data?.parsed?.info?.tokenAmount.amount > 0) {
 				walletTokenListForSet.push(item?.account?.data?.parsed?.info?.mint);
 				walletTokenListForAmounts.push({
@@ -111,7 +104,6 @@ export default function TokensInAccountContainer({ children }) {
 		);
 
 		setWalletTokenListProcesed(filtAry);
-		// Now setWalletTokenListProcesed contains only the items from array1 where the 'address' property is present in array2
 	}, [walletTokenListRaw]);
 
 	return (

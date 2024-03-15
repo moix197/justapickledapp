@@ -1,7 +1,12 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { confirmTransaction } from "services/confirmTransaction";
 
-async function postSwapTransaction(quote, wallet, connection) {
+async function postSwapTransaction(
+	quote,
+	wallet,
+	connection,
+	setTransactionSigned
+) {
 	try {
 		let url = "/api/swap";
 		let response = await fetch(url, {
@@ -18,10 +23,13 @@ async function postSwapTransaction(quote, wallet, connection) {
 		});
 
 		let data = await response.json();
-		console.log(data.data);
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
-		let dataConfirmed = confirmTransaction(signature);
+		setTransactionSigned(true);
+		let dataConfirmed = await confirmTransaction(signature);
+
+		console.log("data confirmation");
+		console.log(dataConfirmed);
 
 		if (dataConfirmed?.value?.err) {
 			return {

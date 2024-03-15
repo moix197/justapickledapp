@@ -1,5 +1,5 @@
-import { connection } from "utils/connection.js";
-import { createVersionedTransaction } from "utils/createVersionedTransaction.js";
+import { connection } from "pages/api/utils/connection";
+import { createVersionedTransaction } from "pages/api/utils/createVersionedTransaction.js";
 import { delay } from "utils/delay.js";
 import { handleTransactionConfirmation } from "utils/handleTransactionConfirmation.js";
 

@@ -5,6 +5,7 @@ import { TransactionDataContext } from "contexts/TransactionDataContextProvider"
 import { postSwapTransaction } from "services/postSwapTransaction";
 import { postSwapPickleTransaction } from "services/postSwapPickleTransaction";
 import AmountAlert from "./AmountAlert";
+import { connection } from "utils/connection";
 
 function ExecuteSwapTransaction({ children }) {
 	const {
@@ -13,11 +14,11 @@ function ExecuteSwapTransaction({ children }) {
 		isLoadingQuote,
 		isLoadingTransaction,
 		setIsLoadingTransaction,
+		setIsTransactionSigned,
 		originTokenData,
 		destinationTokenData,
 	} = useContext(TransactionDataContext);
 	const wallet = useWallet();
-	const connection = new Connection(clusterApiUrl("mainnet-beta"));
 
 	function checkIfIsPickleSwap() {
 		if (
@@ -34,9 +35,20 @@ function ExecuteSwapTransaction({ children }) {
 	async function fireTransaction() {
 		if (isLoadingTransaction || isLoadingQuote) return;
 		setIsLoadingTransaction(true);
+		setIsTransactionSigned(false);
 		let signature = checkIfIsPickleSwap()
-			? await postSwapPickleTransaction(quote, wallet, connection)
-			: await postSwapTransaction(quote, wallet, connection);
+			? await postSwapPickleTransaction(
+					quote,
+					wallet,
+					connection,
+					setIsTransactionSigned
+			  )
+			: await postSwapTransaction(
+					quote,
+					wallet,
+					connection,
+					setIsTransactionSigned
+			  );
 		setIsLoadingTransaction(false);
 		setTransactionSignature(signature);
 	}
