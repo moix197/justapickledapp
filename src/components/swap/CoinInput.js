@@ -9,7 +9,6 @@ import { addCommasToAmount } from "utils/formatAndUpdateAmount";
 import InWalletTokens from "./InWalletTokens";
 import { setUrlFromInput } from "utils/setUrlFromInput";
 import { RefreshPriceBtn } from "./RefreshPriceBtn";
-import { TokenAmountInput } from "components/swap/inputs/tokenAmountInput";
 
 const CoinInput = ({
 	handleChange,
@@ -20,11 +19,9 @@ const CoinInput = ({
 	showQuickBtns = false,
 	text,
 	token,
-	urlAmount = false,
 	showRefreshPrice = { value: false, getNewQuote: () => {} },
 	urlParameter,
 	showTokensInWallet = false,
-	usdcValue = false,
 	tokenValuePerUsdc = false,
 	setMode = null,
 	showTokenList = () => {},
@@ -37,11 +34,6 @@ const CoinInput = ({
 	const [amount, setAmount] = useState("0");
 
 	useEffect(() => {
-		/*let finalAmount = givenAmount
-			? addCommasToAmount(givenAmount, token?.decimals)
-			: addCommasToAmount(amount, token?.decimals);*/
-		//let finalAmount = addCommasToAmount(givenAmount, token?.decimals);
-		console.log(givenAmount);
 		setAmount(givenAmount);
 	}, [givenAmount]);
 
@@ -55,12 +47,6 @@ const CoinInput = ({
 			setFilteredTokenData(rawTokensData);
 		}
 	}, [rawTokensData]);
-
-	useEffect(() => {
-		if (!urlAmount) return;
-		let finalAmount = addCommasToAmount(urlAmount, token?.decimals);
-		setAmount(finalAmount);
-	}, [urlAmount]);
 
 	async function setInitialData() {
 		setTokensData(rawTokensData.slice(0, 25));
@@ -123,9 +109,6 @@ const CoinInput = ({
 							isLoading && "opacity-0"
 						} text-secondary`}
 						onFocus={() => {
-							console.log(
-								urlParameter == "originToken" ? "ExactIn" : "ExactOut"
-							);
 							setMode &&
 								setMode(urlParameter == "originToken" ? "ExactIn" : "ExactOut");
 						}}
