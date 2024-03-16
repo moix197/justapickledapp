@@ -58,10 +58,18 @@ const SwapIndex: NextPage = (props) => {
 		<div>
 			<div className="mb-4">
 				<div className="text-third text-lg uppercase font-bold">
-					<div>Congratulations, you've secured a $pickle allocation</div>
+					<div>
+						Congratulations, you've secured a{" "}
+						<span className="whitespace-nowrap">$pickle allocation</span>
+					</div>
 				</div>
 				<div>
 					{`You've been asigned an allocation of ${finalAllocation.allocation} $Pickle`}
+				</div>
+				<div className="text-red-400 text-xs">
+					important: if you have already some pickle in your wallet you'll get
+					the allocation airdropped to it, otherwise you'll need to claim trough
+					our dapp.
 				</div>
 			</div>
 			<div>
@@ -77,7 +85,7 @@ const SwapIndex: NextPage = (props) => {
 				and{" "}
 				<Link
 					className="text-third hover:opacity-50"
-					href="https://twitter.com/_justapickle"
+					href="https://discord.gg/Cd28VYSfud"
 					target="_blank"
 				>
 					are part of our discord
@@ -90,7 +98,7 @@ const SwapIndex: NextPage = (props) => {
 	return (
 		<WalletDataContainer>
 			<div className="min-h-[calc(100vh-69px)] bg-fade bg-no-repeat bg-cover bg-center flex justify-center items-center max-w-90 pl-2 pr-2 md:pl-10 md:pr-10">
-				<div className="w-[800px] text-center">
+				<div className="w-[500px] text-center">
 					<div className="mb-6 uppercase">
 						<div className="text-2xl text-yellow-600 font-bold">
 							<div>Checkout your $Pickle allocation</div>
