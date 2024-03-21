@@ -62,7 +62,7 @@ function ClaimPageContent() {
 
 		setIsLoadingTransaction(false);
 		console.log(response);
-		if (!response?.err && !response?.value?.err) {
+		if (!response?.err && !response?.value?.err && !response.error) {
 			notify({
 				type: "success",
 				message: `Transaction successfull!`,
@@ -76,7 +76,7 @@ function ClaimPageContent() {
 			type: "error",
 			message: `Transaction couldn't be confirmed`,
 			description: response.error,
-			txid: response.txid,
+			txid: response?.txid,
 		});
 		//getUserAirdropData();
 	}
