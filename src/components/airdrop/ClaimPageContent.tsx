@@ -28,9 +28,7 @@ function ClaimPageContent() {
 
 	async function getUserAirdropData() {
 		if (!userPublicKey) return;
-		let url =
-			"http://localhost:3000/api/airdrop/getUserAirdropData?address=" +
-			userPublicKey;
+		let url = "/api/airdrop/getUserAirdropData?address=" + userPublicKey;
 		let response = await fetch(url);
 		let data = await response.json();
 		console.log(data);
