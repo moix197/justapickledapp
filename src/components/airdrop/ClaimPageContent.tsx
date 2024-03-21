@@ -156,6 +156,8 @@ function ClaimPageContent() {
 								</div>
 							</div>
 						</div>
+					) : !userPublicKey ? (
+						<div>Connect your wallet</div>
 					) : (
 						<div>
 							<div className="text-red-400 text-lg uppercase font-bold">
@@ -184,14 +186,12 @@ function ClaimPageContent() {
 						</div>
 					)}
 				</div>
-				{userAirdropData?.isValidWalletAddress && (
-					<ClaimAirdropBtn
-						disable={userAirdropData?.rewards?.available == 0}
-						clickEvent={() => {
-							claimAllocation();
-						}}
-					></ClaimAirdropBtn>
-				)}
+				<ClaimAirdropBtn
+					disable={userAirdropData?.rewards?.available == 0}
+					clickEvent={() => {
+						claimAllocation();
+					}}
+				></ClaimAirdropBtn>
 			</div>
 		</div>
 	);
