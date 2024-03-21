@@ -57,12 +57,6 @@ function ClaimPageContent() {
 			userPublicKey
 		);
 
-		/*let response = await confirmAirdropTransaction(
-			signedTransaction,
-			userPublicKey
-		);*/
-
-		setIsLoadingTransaction(false);
 		if (!result?.err && !result?.value?.err && !result.error) {
 			notify({
 				type: "success",
