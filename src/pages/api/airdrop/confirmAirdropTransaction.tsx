@@ -47,7 +47,7 @@ async function confirmAirdropTransaction(postData) {
 				transactions: [
 					...airdropUserData[0].transactions.slice(0, -1),
 					{
-						tx: "",
+						tx: postData.body.signature,
 						status: "done",
 						result: "accepted",
 						launchTime:

@@ -61,13 +61,12 @@ function ClaimPageContent() {
 		);
 
 		setIsLoadingTransaction(false);
-		console.log(response);
 		if (!response?.err && !response?.value?.err && !response.error) {
 			notify({
 				type: "success",
 				message: `Transaction successfull!`,
 				description: "check your wallet and enjoy your new $Pickle!",
-				//txid: signature,
+				txid: signedTransaction,
 			});
 			return;
 		}
@@ -76,7 +75,7 @@ function ClaimPageContent() {
 			type: "error",
 			message: `Transaction couldn't be confirmed`,
 			description: "Transaction unsuccessfull, please try again",
-			txid: response?.txid,
+			txid: signedTransaction,
 		});
 		getUserAirdropData();
 	}
