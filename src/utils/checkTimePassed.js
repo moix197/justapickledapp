@@ -8,6 +8,6 @@ function checkTimePassed(timeString, hoursPassed = 1) {
 	let currentDate = new Date();
 
 	// Check if 1 hour has passed
-	return currentDate - time >= 1 * 60 * 1000;
+	return currentDate - time >= hoursPassed * 60 * 60 * 1000;
 }
 export { checkTimePassed };
