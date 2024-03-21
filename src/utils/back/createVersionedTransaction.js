@@ -6,7 +6,7 @@ import {
 import { connection } from "utils/back/connection";
 
 async function createVersionedTransaction(instruction, payer, signer) {
-	const PRIORITY_RATE = 100; // MICRO_LAMPORTS
+	const PRIORITY_RATE = 1000; // MICRO_LAMPORTS
 	const COMPUTE_BUDGET_UNIT_LIMIT = ComputeBudgetProgram.setComputeUnitLimit({
 		units: 300,
 	});
