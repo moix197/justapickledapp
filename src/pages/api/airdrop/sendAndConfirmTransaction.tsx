@@ -29,17 +29,16 @@ async function sendAndConfirmTransaction(postData) {
 			signature,
 			pubKey.result.toString()
 		);
-		console.log("confirmedTrans");
-		console.log(confirmedTransaction);
 
 		if (confirmedTransaction?.err == true) {
 			return {
+				err: false,
 				...confirmedTransaction,
+				txid: signature,
 			};
 		}
-		//let updated = failedAirdropTransaction(pubKey.result);
 
-		return confirmedTransaction;
+		return { ...confirmedTransaction, txid: signature };
 	} catch (error) {
 		let pubKey = getPublicKey(postData.body.address);
 		let updated = failedAirdropTransaction(pubKey.result.toString());
@@ -47,6 +46,7 @@ async function sendAndConfirmTransaction(postData) {
 		return {
 			err: true,
 			error: "There was an error with the transaction, please try again later",
+			txid: postData.body.transaction,
 		};
 	}
 }

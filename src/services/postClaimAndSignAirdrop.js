@@ -14,7 +14,6 @@ async function postClaimAndSignAirdrop(address, wallet, connection) {
 			}),
 		});
 		let data = await response.json();
-		console.log(data);
 		if (data.err) {
 			return {
 				type: "error",
@@ -28,7 +27,6 @@ async function postClaimAndSignAirdrop(address, wallet, connection) {
 		);
 
 		//let signature = await wallet.sendTransaction(transaction, connection);
-		console.log(wallet);
 		let signature = await wallet.signTransaction(transaction, connection);
 
 		return signature;

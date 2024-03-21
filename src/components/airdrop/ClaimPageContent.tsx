@@ -57,6 +57,7 @@ function ClaimPageContent() {
 			userPublicKey
 		);
 
+		setIsLoadingTransaction(false);
 		if (!result?.err && !result?.value?.err && !result.error) {
 			notify({
 				type: "success",
@@ -74,10 +75,6 @@ function ClaimPageContent() {
 			txid: result?.txid,
 		});
 		getUserAirdropData();
-	}
-
-	function roundNumber(item) {
-		return Math.floor(item);
 	}
 
 	return (

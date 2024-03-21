@@ -33,24 +33,33 @@ async function confirmAirdropTransaction(signature ,address){
     let updatedResult = updateDocument(
         "twitter_airdrop",
         { _id: airdropUserData[0]._id },
-        { 
+        {
             rewards: updatedRewards,
-            transactions: [...airdropUserData[0].transactions.slice(0,-1), 
-                { tx: "", status: "done", result: "accepted", launchTime: airdropUserData[0].transactions[airdropUserData[0].transactions.length-1].launchTime }
-            ] 
+            transactions: [
+                ...airdropUserData[0].transactions.slice(0, -1),
+                {
+                    tx: signature,
+                    status: "done",
+                    result: "accepted",
+                    launchTime:
+                        airdropUserData[0].transactions[
+                            airdropUserData[0].transactions.length - 1
+                        ].launchTime,
+                },
+            ],
         }
     );
 
-        return {
-            err: false,
-            result: conn
-        };
+    return {
+        err: false,
+        ...conn,
+    };
    } catch (error) {
         await failedAirdropTransaction(address);
         return {
             err:true,
             error: "We couldn't confirm the transaction",
-            txid: error?.signature
+            txid: signature
         }
    }
 }
