@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 
 //const uri = "mongodb://Admin:%4019721562aA@109.123.250.102:27017/"; // MongoDB URI
 
-const uri = "mongodb:Admin:@19721562aA@localhost:27017"; // MongoDB URI
+const uri = "mongodb://Admin:%4019721562aA@localhost:27017"; // MongoDB URI
 
 const dbName = "pickle_db"; // Name of your MongoDB database
 
