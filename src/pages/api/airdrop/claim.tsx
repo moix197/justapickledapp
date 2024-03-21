@@ -60,7 +60,7 @@ async function claimAirdrop(postData) {
 				error: "Not amount available to claim",
 			};
 		}
-		let airdropAccKey = "FaK4QtNybMMbwzjHneNGJAHv6WpVZ288UdAbfrZT4Gbq";
+		let airdropAccKey = "4Y9mcd8KRiBh7hrzRh7dGfGmenfcBig5on7TUoBkfdkn";
 		let airdropAccAssociatedAccount =
 			await getOrCreateAssociatedTokenAccountFunc({
 				mintPublicKey: mintPublicKey,
@@ -69,7 +69,7 @@ async function claimAirdrop(postData) {
 			});
 
 		let key =
-			"62,37,22,28,55,90,158,169,238,44,202,50,7,86,47,150,211,94,112,140,234,205,204,221,126,247,165,248,223,145,110,240,216,140,51,237,190,158,117,13,225,216,221,229,175,205,222,151,99,223,238,161,71,9,49,206,185,220,255,204,178,83,168,88"
+			"28,162,243,91,90,116,202,29,9,97,191,45,79,223,223,64,216,81,227,29,114,18,133,165,39,70,71,247,49,236,32,29,52,141,251,50,103,237,65,16,248,233,124,194,47,45,30,232,218,177,147,204,94,76,86,180,33,245,59,184,235,241,35,219"
 				.split(",")
 				.map(Number);
 		let pKey = Uint8Array.from(key);
