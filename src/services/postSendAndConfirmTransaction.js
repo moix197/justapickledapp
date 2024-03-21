@@ -12,8 +12,6 @@ async function postSendAndConfirmTransaction(transaction, userPublicKey) {
 			}),
 		});
 		let data = await response.json();
-		console.log("data");
-		console.log(data);
 		return data;
 	} catch (error) {
 		return {

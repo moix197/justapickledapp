@@ -8,6 +8,8 @@ import { notify } from "utils/notifications";
 import PickleLoadingAniamtion from "components/utils/PickleLoadingAnimation";
 import { connection } from "utils/connection";
 import Link from "next/link";
+import { postSendAndConfirmTransaction } from "services/postSendAndConfirmTransaction";
+import { postRejectedAirdropTransaction } from "services/postRejectedAirdropTransaction";
 
 function ClaimPageContent() {
 	const [userPublicKey] = useContext(WalletDataContext);
@@ -32,8 +34,8 @@ function ClaimPageContent() {
 		let response = await fetch(url);
 		let data = await response.json();
 		console.log(data);
-		setUserAirdropData(data.result.user[0]);
-		setAirdropData(data.result.airdrop[0]);
+		setUserAirdropData(data?.result?.user[0]);
+		setAirdropData(data?.result?.airdrop[0]);
 	}
 
 	async function claimAllocation() {
@@ -50,23 +52,23 @@ function ClaimPageContent() {
 			return;
 		}
 
-		/*let result = await postSendAndConfirmTransaction(
-			signedTransaction,
-			userPublicKey
-		);*/
-
-		let response = await confirmAirdropTransaction(
+		let result = await postSendAndConfirmTransaction(
 			signedTransaction,
 			userPublicKey
 		);
 
+		/*let response = await confirmAirdropTransaction(
+			signedTransaction,
+			userPublicKey
+		);*/
+
 		setIsLoadingTransaction(false);
-		if (!response?.err && !response?.value?.err && !response.error) {
+		if (!result?.err && !result?.value?.err && !result.error) {
 			notify({
 				type: "success",
 				message: `Transaction successfull!`,
 				description: "check your wallet and enjoy your new $Pickle!",
-				txid: signedTransaction,
+				txid: result?.txid,
 			});
 			return;
 		}
@@ -75,7 +77,7 @@ function ClaimPageContent() {
 			type: "error",
 			message: `Transaction couldn't be confirmed`,
 			description: "Transaction unsuccessfull, please try again",
-			txid: signedTransaction,
+			txid: result?.txid,
 		});
 		getUserAirdropData();
 	}
@@ -184,7 +186,6 @@ function ClaimPageContent() {
 					)}
 				</div>
 				<ClaimAirdropBtn
-					disable={userAirdropData?.rewards?.available == 0}
 					clickEvent={() => {
 						claimAllocation();
 					}}

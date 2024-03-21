@@ -6,14 +6,14 @@ import {
 import { connection } from "utils/back/connection";
 
 async function createVersionedTransaction(instruction, payer, signer) {
-	const PRIORITY_RATE = 1000; // MICRO_LAMPORTS
+	const PRIORITY_RATE = 10000; // MICRO_LAMPORTS
 	const COMPUTE_BUDGET_UNIT_LIMIT = ComputeBudgetProgram.setComputeUnitLimit({
-		units: 300,
+		units: 300000,
 	});
 	const PRIORITY_FEE_IX = ComputeBudgetProgram.setComputeUnitPrice({
 		microLamports: PRIORITY_RATE,
 	});
-	//instruction.push(COMPUTE_BUDGET_UNIT_LIMIT);
+	instruction.push(COMPUTE_BUDGET_UNIT_LIMIT);
 	instruction.push(PRIORITY_FEE_IX);
 
 	//let minRent = await connection.getMinimumBalanceForRentExemption(0);
