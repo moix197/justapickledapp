@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coral-xyz/borsh": "^0.29.0",
     "@heroicons/react": "^1.0.5",
     "@solana/spl-token": "^0.4.0",
     "@solana/wallet-adapter-base": "^0.9.3",
@@ -19,8 +20,10 @@
     "@solana/wallet-adapter-wallets": "^0.15.3",
     "@solana/web3.js": "^1.91.0",
     "@tailwindcss/typography": "^0.5.0",
+    "borsh": "^2.0.0",
     "cross-fetch": "^4.0.0",
     "immer": "^9.0.12",
+    "mongodb": "^6.5.0",
     "next": "^14.1.0",
     "next-compose-plugins": "^2.2.1",
     "next-transpile-modules": "^9.0.0",

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { Connection, clusterApiUrl } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
 import { postSwapTransaction } from "services/postSwapTransaction";

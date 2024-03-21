@@ -1,7 +1,7 @@
 import { TOKEN_2022_PROGRAM_ID, getAccount } from "@solana/spl-token";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { sellAssociatedAccountPublicKey } from "utils/baseValues";
-import { connection } from "pages/api/utils/connection";
+import { connection } from "utils/back/connection";
 
 async function getBonusPoolAmount() {
 	try {

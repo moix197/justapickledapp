@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getOrCreateAssociatedTokenAccountFunc } from "pages/api/utils/getOrCreateAssociatedAccount";
+import { getOrCreateAssociatedTokenAccountFunc } from "utils/back/getOrCreateAssociatedAccount";
 import {
 	mintPublicKey,
 	pickleTokenAddress,
@@ -15,7 +15,7 @@ import {
 	TOKEN_PROGRAM_ID,
 	createTransferCheckedInstruction,
 } from "@solana/spl-token";
-import { createVersionedTransaction } from "pages/api/utils/createVersionedTransaction";
+import { createVersionedTransaction } from "utils/back/createVersionedTransaction";
 import { getFinalSwapAmount } from "utils/getFinalSwapAmount";
 import { getJupQuote } from "services/getJupQuote";
 
@@ -40,7 +40,6 @@ async function setPickleSwap(postData) {
 	let outAmount = 0;
 	let ownerPublicKey = new PublicKey(postData.body.userPublicKey);
 
-	console.log(quote);
 	let newQuote = await getJupQuote(
 		solTokenAddress,
 		pickleTokenAddress,

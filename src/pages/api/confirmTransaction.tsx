@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connection } from "pages/api/utils/connection";
+import { connection } from "utils/back/connection";
 
 async function confirmTransaction(postData) {
 	try {
@@ -8,18 +8,14 @@ async function confirmTransaction(postData) {
 			"processed"
 		);
 
-		console.log("este es el conn");
-		console.log(conn);
 		return conn;
 	} catch (error) {
-		console.log("este es el error al confirmar la transaction");
-		console.log(error);
 		return {
 			value: {
 				err: true,
 				error:
 					"There was an error confirming the transaction, it's unknown if it succeeded or failed, please check the signature",
-				txid: error.signature,
+				txid: error?.signature,
 			},
 		};
 	}

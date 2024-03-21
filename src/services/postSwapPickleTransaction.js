@@ -26,14 +26,13 @@ async function postSwapPickleTransaction(
 				message: "Transaction Failed!",
 				description: data.error,
 			};
+
 		let data = await response.json();
 		let transaction = VersionedTransaction.deserialize(data.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
 		setTransactionSigned(true);
 		let dataConfirmed = await confirmTransaction(signature);
 
-		console.log("confirmed data end");
-		console.log(dataConfirmed);
 		if (dataConfirmed?.value?.err) {
 			return {
 				type: "error",

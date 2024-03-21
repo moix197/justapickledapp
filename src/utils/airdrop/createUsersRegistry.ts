@@ -1,6 +1,67 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { insertMultipleDocuments, updateDocument } from "utils/back/db/crud";
+import { getPublicKey } from "utils/getPublicKey";
+
+async function createUsersRegistry() {
+	try {
+		let invalidAry = [];
+		let dataAry = [];
+		for (const address of addressAry) {
+			let walletValid = true;
+			let pubKey = getPublicKey(address);
+
+			if (pubKey?.err) {
+				walletValid = false;
+				invalidAry.push(address);
+			}
+
+			let data = {
+				wallet: address,
+				isValidWalletAddress: walletValid,
+				airdropName: "twitterAirdrop",
+				wasAirdropped: false,
+				rewards: {
+					available: 0,
+					sending: 0,
+					claimed: 0,
+					locked: 510205,
+				},
+				tokenAccount: {
+					value: false,
+					address: "",
+				},
+				transactions: [],
+			};
+			dataAry.push(data);
+		}
+
+		let insertItems = await insertMultipleDocuments(dataAry, "twitter_airdrop");
+		let qty = dataAry.length - invalidAry.length;
+
+		let esto = await updateDocument(
+			"airdrops",
+			{ name: "twitterAirdrop" },
+			{ participantsQty: qty }
+		);
+
+		return {
+			err: false,
+			result: {
+				invalidAddresses: invalidAry,
+				success: insertItems ? true : false,
+			},
+		};
+	} catch (error) {
+		return {
+			err: true,
+			error: "we couldn't finish the process, please try again later",
+		};
+	}
+}
+
+export default createUsersRegistry;
 
 const addressAry = [
+	"4HxBz8uYLj29Cszf8wna9KrzZfaKNt1M9EGX5fMygeCm",
 	"7Hazaq3WU2rt9uiHijRxCdJ27AZ4B1AtAaqC6DAP6jcL",
 	"7nfr6DnBQ752F4qACzSjxcjBT8LnUUhhcvEVta34fSTr",
 	"Dd5H9YwoPdnfs9U37qiZdALNAARnMaVocx4mbjMrP7WR",
@@ -100,24 +161,3 @@ const addressAry = [
 	"J5RzYjR4afftQko8BormAa4Cjmn7REvzzEsEPCCnWZm7",
 	"7faiMo1LyifaNPj19Pekwa2mSowgj9k6WEvx5ykKwBPg",
 ];
-
-async function confirmTransaction(req) {
-	let addressMatch = { isElegible: false, allocation: "0" };
-
-	console.log(req.query.address);
-	for (let i = 0; i < addressAry.length; i++) {
-		if (req.query.address == addressAry[i]) {
-			console.log("oka");
-			addressMatch = { isElegible: true, allocation: "500,000" };
-		}
-	}
-
-	return addressMatch;
-}
-
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
-) {
-	res.status(200).json(await confirmTransaction(req));
-}

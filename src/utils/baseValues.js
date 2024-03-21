@@ -12,6 +12,9 @@ const solPublicKey = new PublicKey(
 const solAssociatedAccountPublicKey = solAssociatedAccountPublicKeyFunc();
 const solTokenAddress = "So11111111111111111111111111111111111111112";
 const pickleTokenAddress = "6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7";
+const picklePublicKey = new PublicKey(
+	"6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7"
+);
 
 function mintPublicKeyFunc() {
 	return new PublicKey("6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7");
@@ -42,4 +45,5 @@ export {
 	solAssociatedAccountPublicKey,
 	solTokenAddress,
 	pickleTokenAddress,
+	picklePublicKey,
 };

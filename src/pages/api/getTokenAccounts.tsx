@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connection } from "pages/api/utils/connection";
+import { connection } from "utils/back/connection";
 
 async function testGetAccounts(req) {
 	try {

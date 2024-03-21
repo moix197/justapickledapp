@@ -3,13 +3,17 @@ import {
 	TransactionMessage,
 	VersionedTransaction,
 } from "@solana/web3.js";
-import { connection } from "pages/api/utils/connection";
+import { connection } from "utils/back/connection";
 
 async function createVersionedTransaction(instruction, payer, signer) {
 	const PRIORITY_RATE = 100; // MICRO_LAMPORTS
+	const COMPUTE_BUDGET_UNIT_LIMIT = ComputeBudgetProgram.setComputeUnitLimit({
+		units: 300,
+	});
 	const PRIORITY_FEE_IX = ComputeBudgetProgram.setComputeUnitPrice({
 		microLamports: PRIORITY_RATE,
 	});
+	//instruction.push(COMPUTE_BUDGET_UNIT_LIMIT);
 	instruction.push(PRIORITY_FEE_IX);
 
 	//let minRent = await connection.getMinimumBalanceForRentExemption(0);

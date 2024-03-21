@@ -1,4 +1,4 @@
-function checkTimePassed(timeString) {
+function checkTimePassed(timeString, hoursPassed = 1) {
 	if (!timeString) return;
 
 	// Convert the input UTC date string to a Date object
@@ -8,6 +8,6 @@ function checkTimePassed(timeString) {
 	let currentDate = new Date();
 
 	// Check if 1 hour has passed
-	return currentDate - time >= 1 * 60 * 60 * 1000;
+	return currentDate - time >= 1 * 60 * 1000;
 }
 export { checkTimePassed };

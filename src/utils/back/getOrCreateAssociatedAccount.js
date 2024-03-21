@@ -5,22 +5,31 @@ import {
 	getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
-import { connection } from "pages/api/utils/connection";
+import { connection } from "utils/back/connection";
 
 async function getOrCreateAssociatedTokenAccountFunc({
 	mintPublicKey,
 	ownerPublicKey,
 	tokenProgram,
+	createAccount = true,
 }) {
-	let associatedToken = await getAssociatedTokenAddress(
-		mintPublicKey, // mint
-		ownerPublicKey, // owner
-		false, // allow owner off curve
-		tokenProgram,
-		ASSOCIATED_TOKEN_PROGRAM_ID
-	);
+	let associatedToken;
+	let associatedAcountAddresPubKey;
 
-	let associatedAcountAddresPubKey = new PublicKey(associatedToken);
+	try {
+		associatedToken = await getAssociatedTokenAddress(
+			mintPublicKey, // mint
+			ownerPublicKey, // owner
+			false, // allow owner off curve
+			tokenProgram,
+			ASSOCIATED_TOKEN_PROGRAM_ID
+		);
+		associatedAcountAddresPubKey = new PublicKey(associatedToken);
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+
 	try {
 		let account = await getAccount(
 			connection,
@@ -28,8 +37,10 @@ async function getOrCreateAssociatedTokenAccountFunc({
 			"confirmed",
 			tokenProgram
 		);
+
 		return { userHasAccount: true, associatedToken: associatedToken };
 	} catch (error) {
+		if (!createAccount) return error;
 		if (error == "TokenAccountNotFoundError") {
 			const transactionInstruction = createAssociatedTokenAccountInstruction(
 				ownerPublicKey,
