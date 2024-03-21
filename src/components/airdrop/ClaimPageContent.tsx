@@ -75,10 +75,10 @@ function ClaimPageContent() {
 		notify({
 			type: "error",
 			message: `Transaction couldn't be confirmed`,
-			description: response.error,
+			description: "Transaction unsuccessfull, please try again",
 			txid: response?.txid,
 		});
-		//getUserAirdropData();
+		getUserAirdropData();
 	}
 
 	function roundNumber(item) {
