@@ -12,14 +12,11 @@ async function createUsersRegistry() {
 
 		let timepassed = checkTimePassed(airdropData[0].unlockDate, 24);
 
-		if (
-			!timepassed ||
-			!airdropData[0].isActive ||
-			airdropData[0].amountPartsReleased >= airdropData[0].breakRewardInParts
-		) {
+		if (!timepassed || !airdropData[0].isActive) {
 			return {
 				err: true,
-				error: "We cannot perform this action now, please try again later",
+				error:
+					"Please check that the airdrop is active and that the vesting time has passed",
 			};
 		}
 

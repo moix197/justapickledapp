@@ -16,7 +16,6 @@ async function testGetAccounts(req) {
 
 		return response;
 	} catch (error) {
-		console.log(error);
 		return error;
 	}
 }

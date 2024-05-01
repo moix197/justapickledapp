@@ -33,7 +33,6 @@ function ClaimPageContent() {
 		let url = "/api/airdrop/getUserAirdropData?address=" + userPublicKey;
 		let response = await fetch(url);
 		let data = await response.json();
-		console.log(data);
 		setUserAirdropData(data?.result?.user[0]);
 		setAirdropData(data?.result?.airdrop[0]);
 	}

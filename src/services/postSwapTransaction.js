@@ -23,13 +23,11 @@ async function postSwapTransaction(
 		});
 
 		let data = await response.json();
-		let transaction = VersionedTransaction.deserialize(data.data);
+
+		let transaction = VersionedTransaction.deserialize(data.result.data);
 		let signature = await wallet.sendTransaction(transaction, connection);
 		setTransactionSigned(true);
 		let dataConfirmed = await confirmTransaction(signature);
-
-		console.log("data confirmation");
-		console.log(dataConfirmed);
 
 		if (dataConfirmed?.value?.err) {
 			return {
@@ -45,9 +43,6 @@ async function postSwapTransaction(
 			txid: signature,
 		};
 	} catch (error) {
-		console.log("error");
-		console.log(error);
-
 		return {
 			type: "error",
 			message: `Transaction failed!`,

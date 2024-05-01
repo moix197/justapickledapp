@@ -2,7 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
 import { useRouter } from "next/router";
 import { setUrlFromInput } from "utils/setUrlFromInput";
-import { ExclamationCircleIcon, XCircleIcon } from "@heroicons/react/outline";
+import {
+	ExclamationCircleIcon,
+	XCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const NotiAlert = () => {
 	const [isVisible, setIsVisible] = useState(true);

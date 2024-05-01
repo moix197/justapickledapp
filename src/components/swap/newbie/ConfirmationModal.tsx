@@ -10,6 +10,7 @@ const ConfirmationModal = ({
 	hideCloseBtn = false,
 	setModalStatus = (argument) => {},
 	clickEvent = () => {},
+	clickEventOnClose = null,
 }) => {
 	return (
 		<div
@@ -25,6 +26,7 @@ const ConfirmationModal = ({
 						hideCloseBtn && "hidden"
 					}`}
 					onClick={() => {
+						clickEventOnClose && clickEventOnClose();
 						setModalStatus(false);
 					}}
 				>

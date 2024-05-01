@@ -58,9 +58,6 @@ const TokenAmountInput = ({
 	}, [inputAmount]);
 
 	useEffect(() => {
-		console.log(
-			`tokenValue: ${getTokenValueByUrlParam()} ---- inputAmount ${inputAmount}`
-		);
 		if (getTokenValueByUrlParam() == inputAmount) return;
 		setInputAmount(addCommasToAmount(getTokenValueByUrlParam()));
 	}, [getTokenValueByUrlParam()]);

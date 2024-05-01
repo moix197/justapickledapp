@@ -18,6 +18,7 @@ module.exports = {
 				primary: "#090d16",
 				secondary: "#cccccc",
 				third: "#10B981",
+        thirdDark: "#042319",
 				//fourth: "#4C1D95",
 				fourth: "#320f69",
         error: "#EF4444",
@@ -35,7 +36,11 @@ module.exports = {
   },
   plugins: [
     require('daisyui'),
-    require("@tailwindcss/typography")
+    require("@tailwindcss/typography"),
+    function ({ addVariant }) {
+      addVariant('child', '& > *');
+      addVariant('child-hover', '& > *:hover');
+  }
   ],
   daisyui: {
     styled: true,

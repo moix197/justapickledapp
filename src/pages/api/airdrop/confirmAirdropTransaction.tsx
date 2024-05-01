@@ -13,7 +13,6 @@ async function confirmAirdropTransaction(postData) {
 				error: "Invalid wallet Address",
 			};
 		}
-		console.log("startingConfirmation");
 		let conn = await connection.confirmTransaction(
 			postData.body.signature,
 			"processed"

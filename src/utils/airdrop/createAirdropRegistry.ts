@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { insertMultipleDocuments } from "utils/back/db/crud";
 
 const airdropAry = [

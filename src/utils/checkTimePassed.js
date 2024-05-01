@@ -10,4 +10,18 @@ function checkTimePassed(timeString, hoursPassed = 1) {
 	// Check if 1 hour has passed
 	return currentDate - time >= hoursPassed * 60 * 60 * 1000;
 }
-export { checkTimePassed };
+
+function checkSecondDateComesAfter(firstDate, secondDate) {
+	let result = new Date(secondDate) > new Date(firstDate);
+	return result;
+}
+
+function checkDateIsAfterToday(date) {
+	const now = new Date();
+
+	const targetDate = new Date(date);
+
+	return targetDate > now;
+}
+
+export { checkTimePassed, checkSecondDateComesAfter, checkDateIsAfterToday };

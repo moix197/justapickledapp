@@ -93,7 +93,6 @@ export default function TransactionDataContainer({ children }) {
 
 	useEffect(() => {
 		if (!transactionSignature) return;
-
 		notify(transactionSignature);
 		setTransactionSignature(null);
 	}, [transactionSignature]);

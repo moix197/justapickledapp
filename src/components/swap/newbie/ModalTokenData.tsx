@@ -1,16 +1,6 @@
-import { useEffect, useState, useContext } from "react";
-import { TokenDataContext } from "contexts/TokenDataContextProvider";
-import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
-import TokenList from "components/utils/TokenList";
-import TokenTextInput from "components/swap/TokenTextInput";
-import { useRouter } from "next/router";
-import { setUrlFromInput } from "utils/setUrlFromInput";
-import ConfirmationModal from "components/swap/newbie/ConfirmationModal";
-import InWalletTokens from "../InWalletTokens";
 import ContractAddress from "components/utils/ContractAddress";
 import Link from "next/link";
-import { GlobeAltIcon } from "@heroicons/react/outline";
-import { TokensInAccountContext } from "contexts/TokensInAccountContextProvider";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
 const ModalTokenData = ({
 	tokenData = null,

@@ -17,7 +17,6 @@ function ClaimAirdropBtn({ clickEvent = (key) => {}, disable = false }) {
 				<div
 					className="mt-4"
 					onClick={() => {
-						console.log(disable);
 						if (disable) return;
 						clickEvent(userPublicKey);
 					}}

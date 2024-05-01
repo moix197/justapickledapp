@@ -48,7 +48,6 @@ async function postSwapPickleTransaction(
 			txid: signature,
 		};
 	} catch (error) {
-		console.log(error);
 		return {
 			type: "error",
 			message: `Transaction failed!`,

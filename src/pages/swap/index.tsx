@@ -4,14 +4,15 @@ import type { NextPage } from "next";
 import { TokensInAccountContainer } from "contexts/TokensInAccountContextProvider";
 import { TokenDataContainer } from "contexts/TokenDataContextProvider";
 import { TransactionDataContainer } from "contexts/TransactionDataContextProvider";
-import { WalletDataContainer } from "contexts/WalletDataContextProvider";
 import { RouterContainer } from "contexts/RouterContextProvider";
 import InitialSwapScreen from "components/swap/InitialSwapScreen";
+import AppBar from "components/AppBar";
 
 const SwapIndex: NextPage = (props) => {
 	return (
-		<RouterContainer>
-			<WalletDataContainer>
+		<div>
+			<AppBar />
+			<RouterContainer>
 				<TokenDataContainer>
 					<TokensInAccountContainer>
 						<TransactionDataContainer>
@@ -19,8 +20,8 @@ const SwapIndex: NextPage = (props) => {
 						</TransactionDataContainer>
 					</TokensInAccountContainer>
 				</TokenDataContainer>
-			</WalletDataContainer>
-		</RouterContainer>
+			</RouterContainer>
+		</div>
 	);
 };
 

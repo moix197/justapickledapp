@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { getAllTokens } from "services/getAllTokens";
 
 const LayoutContext = createContext(null);
 

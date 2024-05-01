@@ -11,7 +11,6 @@ export const RequestAirdrop: FC = () => {
 
 	const onClick = useCallback(async () => {
 		if (!publicKey) {
-			console.log("error", "Wallet not connected!");
 			notify({
 				type: "error",
 				message: "error",

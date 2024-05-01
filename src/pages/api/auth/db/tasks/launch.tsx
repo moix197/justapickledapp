@@ -4,11 +4,13 @@ import createUsersRegistry from "utils/airdrop/createUsersRegistry";
 import createAirdropDb from "utils/airdrop/exDbCreat";
 import getTokenAccountsForMint from "utils/airdrop/getTokenAccountsForMint";
 import setAirdropToActive from "utils/airdrop/setAirdropActive";
+import createNewDbCollections from "utils/db/createNewDbCollections";
 import { delay } from "utils/delay";
 
 async function launchAirdrop() {
 	try {
 		let results = {
+			createNewDbs: {},
 			createDb: {},
 			createAirdrop: {},
 			usersAirdrop: {},
@@ -16,7 +18,11 @@ async function launchAirdrop() {
 			getTokensAcc: {},
 		};
 
-		let createDB = await createAirdropDb();
+		let createNewDbs = await createNewDbCollections();
+		await delay(1000);
+		results.createNewDbs = createNewDbs;
+
+		/*let createDB = await createAirdropDb();
 		await delay(1000);
 		results.createDb = createDB;
 
@@ -34,7 +40,7 @@ async function launchAirdrop() {
 
 		let getTokensAcc = await getTokenAccountsForMint();
 		await delay(1000);
-		results.getTokensAcc = getTokensAcc;
+		results.getTokensAcc = getTokensAcc;*/
 
 		return {
 			err: false,

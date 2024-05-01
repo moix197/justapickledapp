@@ -1,6 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { setupCollection } from "utils/back/db/setupCollection";
 
+const tiersData = {
+	name: "tiersData",
+	required: ["name", "percentage"],
+	properties: {
+		name: { bsonType: "string" },
+		percentage: { bsonType: "number" },
+	},
+	unique: "wallet",
+};
+
 let collections = [
 	{
 		name: "airdrops",
@@ -26,6 +36,7 @@ let collections = [
 			partsTimeFrame: { bsonType: "number" },
 			fullAmount: { bsonType: "number" },
 			partAmount: { bsonType: "number" },
+			claimedAmount: { bsonType: "number" },
 			lockDate: { bsonType: "date" },
 			unlockDate: { bsonType: "date" },
 			amountPartsReleased: { bsonType: "number" },
@@ -33,53 +44,111 @@ let collections = [
 		},
 		unique: "name",
 	},
-	{
-		name: "twitter_airdrop",
+	/*{
+		name: "authorities",
+		required: ["owner"],
+		properties: {
+			owner: { bsonType: "string" },
+			admins: {
+				bsonType: "array",
+				items: {
+					type: "string",
+				},
+				uniqueItems: true,
+			},
+		},
+	},*/
+	/*	{
+		name: "tokenSales",
 		required: [
-			"wallet",
-			"airdropName",
-			"rewards",
-			"isValidWalletAddress",
-			"transactions",
+			"authorities",
+			"token",
+			"type",
+			"amount",
+			"price",
+			"perks",
+			"created",
 		],
 		properties: {
-			wallet: { bsonType: "string" },
-			airdropName: { bsonType: "string" },
-			wasAirdropped: { bsonType: "bool" },
-			rewards: {
+			token: {
 				bsonType: "object",
+				required: ["name", "mint"],
 				properties: {
-					available: { bsonType: "number" },
-					sending: { bsonType: "number" },
-					claimed: { bsonType: "number" },
-					locked: { bsonType: "number" },
+					name: { bsonType: "string" },
+					mint: { bsonType: "string" },
 				},
 			},
-			tokenAccount: {
+			type: {
 				bsonType: "object",
+				required: ["value"],
 				properties: {
-					value: { bsonType: "bool" },
-					address: { bsonType: "string" },
+					value: { bsonType: "string", enum: ["selfhosted", "delegated"] }, //"selfhosted"
 				},
 			},
-			isValidWalletAddress: { bsonType: "bool" },
-			transactions: { bsonType: "array" },
+			amount: {
+				bsonType: "object",
+				required: ["forSale", "inVault", "left", "sold"],
+				properties: {
+					forSale: { bsonType: "number" },
+					inVault: { bsonType: "number" },
+					left: { bsonType: "number" },
+					sold: { bsonType: "number" },
+				},
+			},
+			price: {
+				bsonType: "object",
+				required: ["type"],
+				properties: {
+					type: { bsonType: "string", enum: ["fixed", "market"] },
+					value: { bsonType: "number" },
+				},
+			},
+			perks: {
+				bsonType: "object",
+				required: ["extra"],
+				properties: {
+					extra: { bsonType: "number" },
+					others: {
+						bsonType: "array",
+						items: {
+							type: "string",
+						},
+					},
+				},
+			},
+			dates: {
+				bsonType: "object",
+				required: ["created", "launch"],
+				properties: {
+					created: { bsonType: "date" },
+					lastUpdated: { bsonType: "date" },
+					launch: { bsonType: "date" },
+					end: { bsonType: "date" },
+				},
+			},
 		},
-		unique: "wallet",
-	},
+	},*/
 ];
 
 async function createAirdropDb() {
 	try {
+		let finalAry = [];
+
 		for (const element of collections) {
-			await setupCollection({
+			let result = await setupCollection({
 				required: element.required,
 				properties: element.properties,
 				name: element.name,
 				unique: element.unique,
+				update: false,
 			});
+
+			finalAry.push(result);
 		}
-		return "all good";
+		return {
+			err: false,
+			value: finalAry,
+		};
 	} catch (error) {
 		return "we couldn't finish the process, please try again later";
 	}

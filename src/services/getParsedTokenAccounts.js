@@ -4,7 +4,6 @@ async function getParsedTokenAccounts(userPublicKey, tokenProgram) {
 		let response = await fetch(url);
 		return response.json();
 	} catch (error) {
-		console.log(error);
 		return false;
 	}
 }

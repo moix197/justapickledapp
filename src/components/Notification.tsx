@@ -3,8 +3,8 @@ import {
 	CheckCircleIcon,
 	InformationCircleIcon,
 	XCircleIcon,
-} from "@heroicons/react/outline";
-import { XIcon } from "@heroicons/react/solid";
+} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import useNotificationStore from "../stores/useNotificationStore";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { getExplorerUrl } from "../utils/explorer";
@@ -80,14 +80,16 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 					</div>
 					<div className={`ml-2 w-0 flex-1`}>
 						<div
-							className={`text-fgd-1 uppercase ${
+							className={`text-fgd-1 uppercase  ${
 								type == "error" ? "text-error" : "text-third"
 							}  font-bold`}
 						>
 							{message}
 						</div>
 						{description ? (
-							<p className={`mt-0.5 text-sm text-fgd-2`}>{description}</p>
+							<p className={`mt-0.5 text-sm text-fgd-2 whitespace-pre-line`}>
+								{description}
+							</p>
 						) : null}
 						{txid ? (
 							<div className="flex flex-row">
@@ -126,7 +128,7 @@ const Notification = ({ type, message, description, txid, onHide }) => {
 							transition hover:scale-150`}
 						>
 							<span className={`sr-only`}>Close</span>
-							<XIcon className="h-5 w-5" />
+							<XMarkIcon className="h-5 w-5 text-red-400 "></XMarkIcon>
 						</div>
 					</div>
 				</div>

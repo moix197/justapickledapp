@@ -20,7 +20,6 @@ function ExecuteSwapTransaction({ children }) {
 	const wallet = useWallet();
 
 	function checkIfIsPickleSwap() {
-		console.log(wallet);
 		if (
 			originTokenData.address ==
 				"So11111111111111111111111111111111111111112" &&

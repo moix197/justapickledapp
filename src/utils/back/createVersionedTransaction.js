@@ -28,7 +28,6 @@ async function createVersionedTransaction(instruction, payer, signer) {
 	}).compileToV0Message();
 
 	const transaction = new VersionedTransaction(messageV0);
-	//transaction.sign([payer]);
 	if (signer) transaction.sign([signer]);
 
 	let serializedTransaction = transaction.serialize();

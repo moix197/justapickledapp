@@ -15,6 +15,7 @@ import {
 	LedgerWalletAdapter,
 	SlopeWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
+import { notify } from "utils/notifications";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const network = WalletAdapterNetwork.Mainnet;
@@ -34,7 +35,10 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	);
 
 	const onError = useCallback((error: WalletError) => {
-		// notify({ type: 'error', message: error.message ? `${error.name}: ${error.message}` : error.name });
+		/*notify({
+			type: "error",
+			message: error.message ? `${error.name}: ${error.message}` : error.name,
+		});*/
 		console.error(error);
 	}, []);
 
