@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { TransactionDataContext } from "contexts/TransactionDataContextProvider";
 import { TokenImage } from "components/utils/TokenImages";
-import { ChevronDoubleRightIcon } from "@heroicons/react/outline";
 import { StartSwapBtn } from "../StartSwapBtn";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 
 const ConfirmTransactionModalContent = () => {
 	const {
@@ -26,7 +26,7 @@ const ConfirmTransactionModalContent = () => {
 					<div>{originTokenData.name}</div>
 				</div>
 				<div className="ml-6 mr-6 text-third">
-					<ChevronDoubleRightIcon width={40}></ChevronDoubleRightIcon>
+					<ChevronDoubleRightIcon></ChevronDoubleRightIcon>
 				</div>
 				<div className="flex flex-col justify-center items-center w-5/12 ">
 					<TokenImage
