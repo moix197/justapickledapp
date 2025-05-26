@@ -1,9 +1,19 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { BasicButton } from "components/buttons/Basic";
 import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
-function ConnectToContentBtn({ children, clickEvent = null, ctaText = null }) {
+interface ConnectToContentBtnProps {
+	children?: React.ReactNode;
+	clickEvent?: ((publicKey: string) => void) | null;
+	ctaText?: string | null;
+}
+
+function ConnectToContentBtn({
+	children,
+	clickEvent = null,
+	ctaText = null,
+}: ConnectToContentBtnProps) {
 	const [userPublicKey] = useContext(WalletDataContext);
 	const { setVisible: setModalVisible } = useWalletModal();
 

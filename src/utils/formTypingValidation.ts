@@ -113,7 +113,7 @@ function validateDate(value) {
 	// Define the regular expressions for each part of the date
 	const monthRegex = /^([0-1]|1[0-2]|0[1-9]|)\/?$/; // Allowing leading zeros but not only 0
 	const dayRegex = /^([0-3]|3[0-1]|2[0-9]|1[0-9]|0[1-9]|)$/; // Allowing leading zeros but not only 0
-	const yearRegex = /^(20)?\d{0,2}$/;
+	const yearRegex = /^(\d{0}|[2]|2[4-9])$/;
 	let parts = ["", "", ""];
 
 	let isValid;
@@ -127,7 +127,7 @@ function validateDate(value) {
 	) {
 		return {
 			err: !isValid,
-			message: "please introduce a date with the format DD/MM/YYYY",
+			message: "please introduce a date with the format MM/DD/YY",
 		};
 	}
 
@@ -143,7 +143,7 @@ function validateDate(value) {
 		if (!isValid) {
 			return {
 				err: !isValid,
-				message: "the first two digits should have this format DD i.e: 05",
+				message: "please introduce a date with the format MM/DD/YY",
 			};
 		}
 	}
@@ -161,9 +161,7 @@ function validateDate(value) {
 
 	return {
 		err: !isValid,
-		message: isValid
-			? ""
-			: "please introduce a date with the format DD/MM/YYYY",
+		message: isValid ? "" : "please introduce a date with the format MM/DD/YY",
 	};
 }
 

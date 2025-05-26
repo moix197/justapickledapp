@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 
-const SliderBtn = () => {
-	const [value, setValue] = useState(false);
+const SliderBtn: React.FC = () => {
+	const [value, setValue] = useState<boolean>(false);
 
-	const handleSlide = (e) => {
-		if (e.target.value >= 100) {
+	const handleSlide = (e: ChangeEvent<HTMLInputElement>) => {
+		if (parseInt(e.target.value) >= 100) {
 			setValue(true);
 			return;
 		}

@@ -1,4 +1,3 @@
-import { throws } from "assert";
 import { connectToDatabase } from "utils/back/db/db";
 
 // Existing imports and connectToDatabase function...

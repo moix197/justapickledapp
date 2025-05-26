@@ -358,6 +358,15 @@ async function getVaultDataFromDb(vaultId) {
 	};
 }
 
+async function getDatesDataFromDb(dateId) {
+	let date = await findDocuments("datesData", { _id: new ObjectId(dateId) });
+
+	return {
+		err: false,
+		result: date[0],
+	};
+}
+
 async function getSaleDataFromDb(SaleId) {
 	let vault = await findDocuments("tokenSalesData", {
 		_id: new ObjectId(SaleId),
@@ -420,5 +429,7 @@ export {
 	getTokenDataFromDb,
 	getSaleDataFromDb,
 	getUserFromDb,
+	getDatesDataFromDb,
+	getVestingDataFromDb,
 	getUsersWithRewardsFromDb,
 };

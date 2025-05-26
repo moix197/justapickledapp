@@ -24,7 +24,7 @@ export default function RouterContainer({ children }) {
 			pathname: "/swap",
 			query: {
 				originToken: "So11111111111111111111111111111111111111112",
-				destinationToken: "6hQb4SPG9dyMVyaqFeAaMGsnQbcAcNcCtkTm6ED34oC7",
+				destinationToken: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
 				amount: "1",
 			},
 		});

@@ -29,7 +29,7 @@ async function confirmAndSendSaleTransaction(req) {
 			amount,
 			vaultFromDb.result
 		);
-		//const txId = await sendAndConfirmTransactionToNetwork(transaction);
+		const txId = await sendAndConfirmTransactionToNetwork(transaction);
 
 		let isTransactionToSwap;
 
@@ -42,8 +42,8 @@ async function confirmAndSendSaleTransaction(req) {
 			userFromDb.result,
 			vaultFromDb.result,
 			address,
-			//txId,
-			"5sgY6UHA62d2LMd94McvNKzi2HAq8RohabpcoHsnDGnBYpUNoDwpryTVRXFC9f3eJxUJouWAKGNVh7JPLF8gkWe5",
+			txId,
+			//"5sgY6UHA62d2LMd94McvNKzi2HAq8RohabpcoHsnDGnBYpUNoDwpryTVRXFC9f3eJxUJouWAKGNVh7JPLF8gkWe5",
 			isTransactionToSwap
 		);
 

@@ -1,9 +1,17 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { BasicButton } from "components/buttons/Basic";
 import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
-function ClaimAirdropBtn({ clickEvent = (key) => {}, disable = false }) {
+interface ClaimAirdropBtnProps {
+	clickEvent?: (key: string) => void;
+	disable?: boolean;
+}
+
+function ClaimAirdropBtn({
+	clickEvent = (key: string) => {},
+	disable = false,
+}: ClaimAirdropBtnProps) {
 	const [userPublicKey] = useContext(WalletDataContext);
 
 	const { setVisible: setModalVisible } = useWalletModal();
@@ -11,6 +19,7 @@ function ClaimAirdropBtn({ clickEvent = (key) => {}, disable = false }) {
 	function connectWallet() {
 		setModalVisible(true);
 	}
+
 	return (
 		<div className="w-full">
 			{userPublicKey ? (

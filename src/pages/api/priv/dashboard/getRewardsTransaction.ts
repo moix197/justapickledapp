@@ -5,10 +5,14 @@ import {
 	getTokenDataFromDb,
 	getUserFromDb,
 	getVaultDataFromDb,
+	getVestingDataFromDb,
 } from "services/db/sales";
 import { getSessionWalletAddress } from "utils/getSessionWalletAddress";
 import { checkIfOwnerOrAdmin } from "utils/validation/checkIfOwnerOrAdmin";
-import { createRewardsSendTransaction } from "utils/transactions";
+import {
+	createRewardsSendTransaction,
+	createVestingTransaction,
+} from "utils/transactions";
 import { bulkValidate } from "utils/formSubmitValidation";
 import {
 	performUserRewardsSecurityCheck,
@@ -20,7 +24,7 @@ async function generateRewardsTransaction(req) {
 		const address = await getSessionWalletAddress(req);
 		const { saleId, userAddress } = req.query;
 
-		const validation = bulkValidate({
+		/*const validation = bulkValidate({
 			objectId: saleId,
 			walletAddress: userAddress,
 		});
@@ -28,22 +32,30 @@ async function generateRewardsTransaction(req) {
 		if (validation.length > 0) {
 			throw new Error(validation[0].result[0].message);
 		}
-
+		*/
 		let saleData = await getSaleDataFromDb(saleId);
 
-		checkIfOwnerOrAdmin("tokenSales", saleData.result, address);
+		//checkIfOwnerOrAdmin("tokenSales", saleData.result, address);
 
 		let vaultData = await getVaultDataFromDb(saleData.result.vaultId);
+		let vestingData = await getVestingDataFromDb(saleData.result.vestingId);
 		let tokenData = await getTokenDataFromDb(vaultData.result.tokenMint);
 		let userData = await getUserFromDb(userAddress, saleId);
 
 		performUserRewardsSecurityCheck(userData.result);
 		performVaultRewardsSecurityCheck(vaultData.result);
 
-		let transaction = await createRewardsSendTransaction(
+		/*let transaction = await createRewardsSendTransaction(
 			vaultData.result,
 			tokenData.result,
 			userData.result
+		);*/
+
+		let transaction = await createVestingTransaction(
+			vestingData.result,
+			tokenData.result,
+			userData.result,
+			vaultData.result
 		);
 
 		return {

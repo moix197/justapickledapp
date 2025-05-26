@@ -1,5 +1,5 @@
+import React, { useContext, useEffect, useState } from "react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { useContext, useEffect, useState } from "react";
 import { BasicButton } from "components/buttons/Basic";
 import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import Link from "next/link";
@@ -7,16 +7,23 @@ import { useSession } from "next-auth/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { handleSignIn } from "utils/auth/HandleSignIn";
 
+interface ConnectToLinkBtnProps {
+	clickEvent?: () => void;
+	text?: string;
+	secondBtnTxt?: string;
+	href: string;
+}
+
 function ConnectToLinkBtn({
 	clickEvent = () => {},
 	text = "",
 	secondBtnTxt = "Go to dashboard",
 	href,
-}) {
+}: ConnectToLinkBtnProps) {
 	const [userPublicKey] = useContext(WalletDataContext);
-	const [isLoading, setIsLoading] = useState(false);
-	const [indicationText, setIndicationText] = useState("");
-	const [btnText, setBtnText] = useState("");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [indicationText, setIndicationText] = useState<string>("");
+	const [btnText, setBtnText] = useState<string>("");
 	const { setVisible: setModalVisible } = useWalletModal();
 	const { status } = useSession();
 	const wallet = useWallet();

@@ -1,5 +1,4 @@
 import InputText from "./InputText";
-import TooltipHelp from "../TooltipHelp";
 
 function Toggle({
 	value,
@@ -59,13 +58,6 @@ function Toggle({
 							);
 						})}
 				</div>
-				{toolTipData && (
-					<TooltipHelp
-						text={toolTipData}
-						type="button"
-						className="ml-1 sm:ml-4"
-					></TooltipHelp>
-				)}
 			</div>
 		</div>
 	);

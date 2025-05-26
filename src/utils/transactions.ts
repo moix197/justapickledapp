@@ -16,6 +16,10 @@ import { mintPublicKey } from "./baseValues";
 import { createVersionedTransaction } from "./back/createVersionedTransaction";
 import { publicKey } from "@coral-xyz/borsh";
 import { removeDecimalPointAndAddNumbers } from "./manageDecimals";
+import { Schedule } from "./bonfida/vesting/state";
+import { Numberu64, generateRandomSeed } from "./bonfida/vesting/utils";
+import { TOKEN_VESTING_PROGRAM_ID, create } from "./bonfida/vesting/main";
+import { Instruction } from "./bonfida/vesting/instructions";
 
 async function deserializeAndSignTransaction(
 	transactionData,
@@ -24,6 +28,8 @@ async function deserializeAndSignTransaction(
 ) {
 	try {
 		let transaction = VersionedTransaction.deserialize(transactionData);
+		console.log("transaction");
+		console.log(transaction);
 		let signature = await wallet.signTransaction(transaction, connection);
 
 		return signature;
@@ -182,10 +188,81 @@ async function createRewardsSendTransaction(vaultData, tokenData, userData) {
 	return versionedTransaction;
 }
 
+async function createVestingTransaction(
+	vestingData,
+	tokenData,
+	userData,
+	vaultData
+) {
+	const vestingDatesAry = createVestingDatesAry(vestingData);
+	const amountPerPart = 0.001;
+
+	const lock = async () => {
+		const schedules: Schedule[] = [];
+		for (let date of vestingDatesAry) {
+			schedules.push(
+				new Schedule(
+					/** Has to be in seconds */
+					// @ts-ignore
+					new Numberu64(date.getTime() / 1_000),
+					/** Don't forget to add decimals */
+					// @ts-ignore
+					new Numberu64(amountPerPart * Math.pow(10, tokenData.info.decimals))
+				)
+			);
+		}
+		const seed = generateRandomSeed();
+
+		console.log("seed");
+		console.log(seed);
+		const instruction = await create(
+			connection,
+			TOKEN_VESTING_PROGRAM_ID,
+			Buffer.from(seed),
+			new PublicKey(vaultData.owner),
+			new PublicKey(vaultData.owner),
+			new PublicKey(vaultData.accounts.mintAssociated),
+			new PublicKey(userData.tokenAccount.address),
+			new PublicKey(vaultData.tokenMint),
+			schedules
+		);
+
+		return instruction;
+	};
+
+	const esto = await lock();
+	const versionedTransaction = await createVersionedTransaction(
+		esto,
+		new PublicKey(vaultData.owner)
+	);
+	console.log("ejeleee");
+	console.log(versionedTransaction);
+	return versionedTransaction;
+}
+
+function createVestingDatesAry(vestingData) {
+	var datesArray = [];
+	var currentDate = new Date(vestingData.nextDate);
+
+	// Loop to create the array
+	for (var i = 0; i < vestingData.parts; i++) {
+		datesArray.push(new Date(currentDate));
+		currentDate.setHours(currentDate.getHours() + vestingData.interval);
+
+		// Ensure the next date is after the specified i	nterval from the previous one
+		while (currentDate <= datesArray[i]) {
+			currentDate.setHours(currentDate.getHours() + vestingData.interval);
+		}
+	}
+
+	return datesArray;
+}
+
 export {
 	deserializeAndSignTransaction,
 	sendAndConfirmTransactionToNetwork,
 	createSalePurchaseTransaction,
 	createRewardsSendTransaction,
 	createRewardsVersionedTransactionInstructions,
+	createVestingTransaction,
 };

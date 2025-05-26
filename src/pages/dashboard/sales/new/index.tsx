@@ -107,7 +107,7 @@ function VaultNewPage() {
 							type: "text",
 							validation: "price",
 							toolTipData:
-								"This will be the final amount at which all users will buy the token",
+								"This will be the final amount at which all users will buy the token (MUST BE IN USDT)",
 						},
 					],
 				},

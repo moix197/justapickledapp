@@ -1,29 +1,43 @@
-import { ClaimAirdropBtn } from "components/airdrop/ClaimAirdropBtn";
-import { confirmAirdropTransaction } from "services/confirmAirdropTransaction";
-import { WalletDataContext } from "contexts/WalletDataContextProvider";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Link from "next/link";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { ClaimAirdropBtn } from "components/airdrop/ClaimAirdropBtn";
+import { WalletDataContext } from "contexts/WalletDataContextProvider";
 import { postClaimAndSignAirdrop } from "services/postClaimAndSignAirdrop";
+import { postSendAndConfirmTransaction } from "services/postSendAndConfirmTransaction";
 import { notify } from "utils/notifications";
 import PickleLoadingAniamtion from "components/utils/PickleLoadingAnimation";
 import { connection } from "utils/connection";
-import Link from "next/link";
-import { postSendAndConfirmTransaction } from "services/postSendAndConfirmTransaction";
-import { postRejectedAirdropTransaction } from "services/postRejectedAirdropTransaction";
+
+interface UserAirdropData {
+	wasAirdropped: boolean;
+	rewards: {
+		available: number;
+		locked: number;
+		claimed: number;
+	};
+	isValidWalletAddress: boolean;
+}
+
+interface AirdropData {
+	fullAmount: number;
+	partAmount: number;
+}
 
 function ClaimPageContent() {
 	const [userPublicKey] = useContext(WalletDataContext);
-	const [userAirdropData, setUserAirdropData] = useState({
+	const [userAirdropData, setUserAirdropData] = useState<UserAirdropData>({
 		wasAirdropped: false,
 		rewards: { available: 0, locked: 0, claimed: 0 },
 		isValidWalletAddress: false,
 	});
-	const [airdropData, setAirdropData] = useState({
+	const [airdropData, setAirdropData] = useState<AirdropData>({
 		fullAmount: 0,
 		partAmount: 0,
 	});
 	const [isLoadingTransaction, setIsLoadingTransaction] = useState(false);
 	const wallet = useWallet();
+
 	useEffect(() => {
 		getUserAirdropData();
 	}, [userPublicKey]);
@@ -45,7 +59,7 @@ function ClaimPageContent() {
 			connection
 		);
 
-		if (signedTransaction?.type == "error") {
+		if (signedTransaction?.type === "error") {
 			setIsLoadingTransaction(false);
 			notify({ ...signedTransaction });
 			return;
@@ -60,7 +74,7 @@ function ClaimPageContent() {
 		if (!result?.err && !result?.value?.err && !result.error) {
 			notify({
 				type: "success",
-				message: `Transaction successfull!`,
+				message: `Transaction successful!`,
 				description: "check your wallet and enjoy your new $Pickle!",
 				txid: result?.txid,
 			});
@@ -70,7 +84,7 @@ function ClaimPageContent() {
 		notify({
 			type: "error",
 			message: `Transaction couldn't be confirmed`,
-			description: "Transaction unsuccessfull, please try again",
+			description: "Transaction unsuccessful, please try again",
 			txid: result?.txid,
 		});
 		getUserAirdropData();
@@ -86,7 +100,7 @@ function ClaimPageContent() {
 						height={150}
 						title="Transaction in progress"
 						description="Accept the transaction on your wallet and wait for it to be confirmed on chain"
-					></PickleLoadingAniamtion>
+					/>
 				</div>
 			)}
 			<div>
@@ -179,9 +193,10 @@ function ClaimPageContent() {
 					clickEvent={() => {
 						claimAllocation();
 					}}
-				></ClaimAirdropBtn>
+				/>
 			</div>
 		</div>
 	);
 }
+
 export default ClaimPageContent;

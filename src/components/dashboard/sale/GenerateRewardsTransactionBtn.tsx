@@ -30,6 +30,8 @@ function GenerateRewardsTransactionBtn({
 				}
 			);
 
+			console.log("response");
+			console.log(response);
 			if (response.err) {
 				throw new Error(response.error);
 			}

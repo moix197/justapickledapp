@@ -24,7 +24,7 @@ async function sendRewardsTransaction(req) {
 			throw new Error(validation[0].result[0].message);
 		}
 
-		//const txId = await sendAndConfirmTransactionToNetwork(transaction);
+		const txId = await sendAndConfirmTransactionToNetwork(transaction);
 		const saleData = await getSaleDataFromDb(saleId);
 		const vaultData = await getVaultDataFromDb(saleData.result.vaultId);
 		const tokenData = await getTokenDataFromDb(vaultData.result.tokenMint);
@@ -50,8 +50,8 @@ async function sendRewardsTransaction(req) {
 					vaultData: vaultData.result,
 					tokenData: tokenData.result,
 					userData: userData.result,
-					tx: "4DZ5PjyJLVnPkUN5gg3SPRNHsiVuANMgvJHZgGNTQN57RuaYYKqzsGqfb6q7YdMvUgYrm2r1MphhLm5g2JQ8tKm4",
-					//tx: txId,
+					//tx: "4DZ5PjyJLVnPkUN5gg3SPRNHsiVuANMgvJHZgGNTQN57RuaYYKqzsGqfb6q7YdMvUgYrm2r1MphhLm5g2JQ8tKm4",
+					tx: txId,
 					saleId: saleData.result._id,
 				});
 			} catch (error) {
@@ -61,7 +61,7 @@ async function sendRewardsTransaction(req) {
 
 		if (errorsAry.length > 0) {
 			throw new Error(
-				`We had some erros while performing the operation, please check: ${errorsAry.join(
+				`We found some erros while performing the operation, please check: ${errorsAry.join(
 					" - "
 				)}`
 			);
