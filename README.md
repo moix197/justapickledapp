@@ -82,10 +82,23 @@ yarn install
    Create a `.env.local` file in the root directory with the following variables:
 
 ```env
+# Database Configuration
 MONGODB_URI=your_mongodb_connection_string
+
+# Authentication
 NEXTAUTH_SECRET=your_nextauth_secret
 NEXTAUTH_URL=http://localhost:3000
+
+# Solana Configuration
+HELIUS_API_KEY=your_helius_api_key  # Required for RPC access and enhanced Solana functionality
 ```
+
+Required Environment Variables:
+
+- `MONGODB_URI`: Your MongoDB connection string for database access
+- `NEXTAUTH_SECRET`: A random string used to encrypt cookies and tokens
+- `NEXTAUTH_URL`: The base URL of your application
+- `HELIUS_API_KEY`: Your Helius API key for enhanced Solana RPC access. You can get one at [https://dev.helius.xyz/](https://dev.helius.xyz/)
 
 ## 🏃‍♂️ Running the Application
 
